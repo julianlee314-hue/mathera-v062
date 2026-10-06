@@ -3,6 +3,7 @@
 ## 0.6.2 (6 October 2026)
 
 - 0.6.2: era paintings upscaled to 3200×1800 for sharp display on retina and iPad screens.
+- New Era I world-tree painting.
 
 ## 0.6.1 (6 October 2026)
 
