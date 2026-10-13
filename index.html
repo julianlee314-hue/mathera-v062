@@ -42376,7 +42376,7 @@ const INPUT_HINT = { set: '2, −3', interval: '(−∞, 3]', point: '(2, −3)'
 const kindOf = f => ['set', 'interval', 'point', 'exact', 'expr', 'eqn', 'complex'].find(k => f[k] !== undefined);
 let P = PS.II;
 let RULES = { ...DEFAULT_RULES };
-let META = { pseudo: null, at: {}, placed: {}, start: {}, era: 'II', journal: { days: {} } };
+let META = { at: {}, placed: {}, start: {}, era: 'II', journal: { days: {} } };
 function setEra(k) { era = k; META.era = k; UNITS = ERAS[k].units; SKILLS = ERAS[k].E.skills; ORDER = SKILLS.map(s => s.id); P = PS[k]; selUnit = META.start[k] || UNITS[0][0]; }
 let S = MM.session();
 const R = () => RULES;
@@ -42391,7 +42391,7 @@ function teleRec(key) { return TELE[key] || (TELE[key] = { t: 0, r: 0, s: 0, fun
 const LKEY = 'mathera-v02';
 const enc = k => k.replace(/\./g, '_');           // db field names: no dots
 const dec = k => k.replace(/_/g, '.');
-let db = null, uid = null, remote = false, saveT = null, teleT = null, saving = false, again = false;
+let saveT = null;
 const dirty = new Set();
 function snapshot() { return { v: 3, eras: Object.fromEntries(ERA_KEYS.map(k => [k, { skills: PS[k].skills, steps: PS[k].steps }])), settings: SET, rules: RULES, meta: META, tele: TELE }; }
 // v0.2 kept one era (II) with meta.placed as a boolean and settings.start
@@ -42424,39 +42424,13 @@ function save() {
   clearTimeout(saveT); saveT = setTimeout(() => { flush(); try { dailyRing(); } catch (e) {} }, 700);
   try { localStorage.setItem(LKEY, JSON.stringify(snapshot())); } catch (e) {}
 }
-const packUnit = u => { const d = MM.unitDoc(PS[eraOf(u)], u), o = { at: META.at[u] || now(), skills: {}, steps: {} };
-  for (const [k, v] of Object.entries(d.skills)) o.skills[enc(k)] = v; for (const [k, v] of Object.entries(d.steps)) o.steps[enc(k)] = v; return o; };
-const unpackUnit = o => { const d = { skills: {}, steps: {} };
-  for (const [k, v] of Object.entries(o.skills || {})) d.skills[dec(k)] = v; for (const [k, v] of Object.entries(o.steps || {})) d.steps[dec(k)] = v; return d; };
-const unitDocId = u => 'unit-' + u.replace('.', '-');   // data/users/<uid>/unit-II-5 (a document: even path length)
-async function flush() {
-  if (!remote) { setSaved('Saved on this device'); return; }
-  if (saving) { again = true; return; }
-  saving = true;
-  try {
-    const units = [...dirty]; dirty.clear();
-    for (const u of units) await db.doc(`data/users/${uid}/${unitDocId(u)}`).set(JSON.parse(JSON.stringify(packUnit(u))));
-    await db.doc(`data/users/${uid}/settings`).set(JSON.parse(JSON.stringify({ v: 3, settings: SET, rules: RULES, meta: META })));
-    setSaved('Saved to your account');
-  } catch (e) {
-    if (e && (e.code === 'invalid_argument' || e.code === 'not_granted')) { remote = false; setSaved('Saved on this device'); }
-    else setSaved('Saved on this device; will sync when back online');
-  }
-  saving = false; if (again) { again = false; flush(); }
-}
+function flush() { setSaved('Saved on this device'); }   // local only: no remote sync
 /* activity journal: one line per day of study, carried in the Acorn (acorn.js keeps the rules) */
 function jlog(ok, secs, choice) {
   try { const t = now(); Acorn.journalLog(META.journal, { serial: Acorn.serialOf(cur.id), ok, secs, hint: hintUsed, choice }, t); Acorn.journalTrim(META.journal, Acorn.dayOf(t)); } catch (e) {}
 }
 function setSaved(t) { ['savedHome', 'savedRules'].forEach(i => { const el = $(i); if (el) el.textContent = t; }); }
-function teleSave() {
-  clearTimeout(teleT);
-  teleT = setTimeout(async () => {
-    if (!db || !META.pseudo) return;
-    const steps = {}; for (const [k, v] of Object.entries(TELE)) steps[enc(k)] = v;
-    try { await db.doc(`telemetry/${META.pseudo}`).set({ v: 2, at: new Date().toISOString(), pace: SET.pace, dial: SET.dial, start: META.start, steps }); } catch (e) {}
-  }, 4000);
-}
+function teleSave() {}            // step counters stay on this device only; nothing is sent
 
 /* ================= views ================= */
 let view = 'home';
@@ -43373,8 +43347,8 @@ $('rSend').addEventListener('click', async () => {
   const tmp = document.createElement('div'); tmp.innerHTML = q.prompt; const text = tmp.textContent.slice(0, 600);
   const answer = q.kind === 'num' ? q.fields.map(f => SHOWV(cur.id, f)).join(' ; ') : q.kind === 'order' ? q.ans.join(',') : (() => { const d = document.createElement('div'); d.innerHTML = q.choices[q.ans]; return d.textContent || '(picture)'; })();
   const typed = q.kind === 'num' ? q.fields.map((f, i) => ($('f' + i) || {}).value || '').join(' ; ') : q.kind === 'order' ? oseq.join(',') : (picked == null ? '' : String(picked + 1));
-  const rep = { code: $('qCode').textContent, skill: cur.id, step: cur.step, mode: cur.mode, question: text, answer, typed, note: $('rText').value.trim().slice(0, 500), rules: OPTS(), at: new Date().toISOString(), pseudo: META.pseudo || null };
-  let sent = false; if (db) { try { await db.collection('bugs').add(rep); sent = true; } catch (e) {} }
+  const rep = { code: $('qCode').textContent, skill: cur.id, step: cur.step, mode: cur.mode, question: text, answer, typed, note: $('rText').value.trim().slice(0, 500), rules: OPTS(), at: new Date().toISOString() };
+  const sent = false; void rep;       // reports never leave the device
   $('rbox').hidden = true; $('rText').value = ''; $('reportBtn').hidden = false;
   $('reportBtn').textContent = sent ? 'Thanks. Your report reached the team.' : 'Thanks. This copy can’t send reports, so please tell whoever shared it (code above).';
 });
@@ -44105,7 +44079,7 @@ $('repBack').addEventListener('click', () => show(RSRC ? 'rules' : 'id'));
 $('reportOpen').addEventListener('click', () => show('report'));
 
 const hadLocal = loadLocal();
-if (!META.pseudo) META.pseudo = 't' + Math.random().toString(36).slice(2, 10);
+delete META.pseudo;                // drop any old per-device ID saved by earlier versions
 setEra(ERAS[META.era] ? META.era : 'II');
 const firstView = () => show('gate');
 if (hadLocal) firstView(); else show('loading');
@@ -44113,45 +44087,8 @@ setSaved('Saved on this device');
 (async () => {
   try { await boot(); } finally { if (view === 'loading') firstView(); }
 })();
-async function boot() {
-  const use = (window.claude && typeof window.claude.use === 'function') ? n => window.claude.use(n) : () => Promise.resolve(null);
-  const [d, u] = await Promise.all([use('db'), use('user')]);
-  db = d; if (!db || !u) return;
-  try { uid = await u.id(); } catch (e) { uid = null; }
-  if (!uid) return;
-  try {
-    const base = `data/users/${uid}`;
-    const st = await db.doc(`${base}/settings`).get();
-    remote = true;
-    if (st.exists) {
-      const o = st.data() || {};
-      const rMeta = o.meta || {};
-      // settings: whichever side placed first / is the account copy wins unless this device has newer unit work
-      upgradeMeta(rMeta, o.settings);
-      if (!hadLocal || Object.keys(rMeta.placed).length) {
-        SET.pace = (o.settings || {}).pace || SET.pace; SET.dial = (o.settings || {}).dial || SET.dial; SET.brave = !!(o.settings || {}).brave;
-        RULES = Object.assign({ ...DEFAULT_RULES }, o.rules || {}); applyPalette();
-        for (const k of ERA_KEYS) { if (rMeta.placed[k]) META.placed[k] = true; if (rMeta.start[k] && !META.start[k]) META.start[k] = rMeta.start[k]; }
-        if (rMeta.pseudo) META.pseudo = rMeta.pseudo;
-        if (!hadLocal && ERAS[rMeta.era]) setEra(rMeta.era);
-      }
-      const snaps = await Promise.all(ALL_UNITS.map(([x]) => db.doc(`${base}/${unitDocId(x)}`).get()));
-      for (const [ui, [x]] of ALL_UNITS.entries()) {
-        const Px = PS[eraOf(x)], ORDx = Px.order;
-        const snap = snaps[ui];
-        if (snap.exists) { const doc = snap.data() || {}; if (!META.at[x] || (doc.at || 0) >= META.at[x]) { for (const id of ORDx) if (MM.unitOf(id) === x) { delete Px.skills[id]; 'abcdef'.split('').forEach(k => delete Px.steps[id + '.' + k]); } MM.mergeUnit(Px, unpackUnit(doc)); META.at[x] = doc.at || 0; } else dirty.add(x); }
-        else if (META.at[x]) dirty.add(x);
-      }
-    } else {
-      // first time on this account: migrate v0.1 rules if they exist there, then push whatever this device has
-      try { const v1 = await db.doc(`${base}/progress`).get(); if (v1.exists && !hadLocal) { const o = v1.data() || {}; if (o.rules) migrateV1(o.rules); } } catch (e) {}
-      ALL_UNITS.forEach(([x]) => dirty.add(x));
-    }
-    save(); flush();
-    selUnit = META.start[era] || selUnit;
-    if (view === 'welcome' && META.placed[era]) show('home'); else if (view === 'home') renderHome(); else if (view === 'id') renderID(); else if (view === 'rules') renderRules();
-  } catch (e) { remote = false; console.warn('mathera sync', e); }
-}
+async function boot() {}           // no accounts, no remote sync: everything stays on this device
+
 applyPalette();
 window.__mathera = { celebrate: (...a) => celebrate(...a), force: (id, step, drill) => { FORCE = { id, step, mode: 'practice', drill: !!drill }; newQ(); }, dq: () => DQ, P: () => P, PS, setEra: k => { setEra(k); show(META.placed[k] ? 'home' : 'welcome'); }, era: () => era, S: () => S, MM, clock, cur: () => cur, q: () => q, show, renderHome, acorn: () => myAcorn(), graft: (code, rules) => graft(Acorn.decode(code), rules), makeReport };
 })();
