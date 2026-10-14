@@ -447,6 +447,8 @@ body.worldwide .app{max-width:1100px}
 .wvtabs button[aria-pressed="true"]{border-color:var(--acc);background:var(--acc-soft);color:var(--ink)}
 .wvhead h1{margin:2px 0 4px;font-size:clamp(24px,3.4vw,34px);letter-spacing:-.02em;line-height:1.1}
 .wvhead p{margin:0;color:var(--muted)}
+.hlogo{display:flex;justify-content:center;margin:4px 0 10px}.hlogo svg{width:56px;height:56px}
+#v-world{display:none!important}
 .wvpic{position:relative;border-radius:14px;overflow:hidden;aspect-ratio:16/9;max-width:100%;background:#0B0D0A}
 .wvpic img{display:block;width:100%;height:100%;object-fit:cover}
 .wvpic svg{position:absolute;inset:0;width:100%;height:100%}
@@ -45598,6 +45600,7 @@ let view = 'home';
 const VIEWS = ['loading', 'gate', 'welcome', 'home', 'alarm', 'practice', 'id', 'rules', 'report', 'world', 'basic'];
 let WANT_PICK = false;   // true only when the learner asked to choose a starting unit
 function show(v) {
+  if (v === 'world') v = META.placed[era] ? 'home' : 'welcome';   // retired view: always the unified tree page
   if (v === 'welcome' && !WANT_PICK && !META.placed[era] && ERA_KEYS.some(x => x !== era && META.placed[x])) {
     META.placed[era] = true; META.start[era] = UNITS[0][0]; selUnit = UNITS[0][0]; save(); v = 'home';   // a new era starts at its beginning; House Rules can move it
   }
@@ -45664,7 +45667,10 @@ function worldCurve(a, b) {
   const mx = (a[0] + b[0]) / 2, my = Math.min(a[1], b[1]) - Math.abs(a[0] - b[0]) * .12, c = [mx + (a[0] - mx) * .35, my];
   return { d: `M${a[0]} ${a[1]} Q ${c[0]} ${c[1]} ${b[0]} ${b[1]}`, at: t => [(1 - t) ** 2 * a[0] + 2 * (1 - t) * t * c[0] + t * t * b[0], (1 - t) ** 2 * a[1] + 2 * (1 - t) * t * c[1] + t * t * b[1]] };
 }
-function openWorld(k) { worldK = WORLD_ART[k] ? k : era; show('world'); }
+function openWorld(k) {   // 0.6.3: one tree page for every era (the old world view is retired)
+  if (ERAS[k] && k !== era) { setEra(k); S = MM.session(); save(); }
+  show(META.placed[era] ? 'home' : 'welcome');
+}
 function renderWorld() {
   const k = worldK, a = WORLD_ART[k], w = WORLDS[k], live = !!ERAS[k], brs = worldBranches(k);
   const n = brs.reduce((s, b) => s + b.sks.length, 0), proven = brs.reduce((s, b) => s + b.proven, 0);
@@ -45905,7 +45911,7 @@ $('treeSvg').addEventListener('click', e => { const b = e.target.closest('.br');
 $('treeSvg').addEventListener('keydown', e => { const b = e.target.closest('.br'); if (b && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); selectUnit(b.dataset.u, true); } });
 function renderTree() {
   const k = era, w = WORLDS[k]; if (!WORLD_ART[k] || !w) { renderTreeRetired(); return; }
-  $('hHead').innerHTML = `<span class="where">Era ${k} · ${esc(ERAS[k].name)}</span><h1>${esc(w.name)}</h1><p>${esc(w.line)}</p>`;
+  $('hHead').innerHTML = `<div class="hlogo" aria-hidden="true">${worldSVG(k, 56)}</div><span class="where">Era ${k} · ${esc(ERAS[k].name)}</span><h1>${esc(w.name)}</h1><p>${esc(w.line)}</p>`;
   $('hPic').innerHTML = worldPicHTML(k, worldBranches(k), selUnit);
   worldHover($('hPic'));
   wtBg('home');
