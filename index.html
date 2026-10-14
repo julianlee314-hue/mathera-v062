@@ -447,7 +447,7 @@ body.worldwide .app{max-width:1100px}
 .wvtabs button[aria-pressed="true"]{border-color:var(--acc);background:var(--acc-soft);color:var(--ink)}
 .wvhead h1{margin:2px 0 4px;font-size:clamp(24px,3.4vw,34px);letter-spacing:-.02em;line-height:1.1}
 .wvhead p{margin:0;color:var(--muted)}
-.hlogo{display:flex;justify-content:center;margin:4px 0 10px}.hlogo svg{width:56px;height:56px}
+#eraTabs .ptile{display:flex;align-items:center;justify-content:center;padding:8px;min-height:84px}#eraTabs .ptile svg{width:100%;height:68px;max-width:72px;image-rendering:pixelated;shape-rendering:crispEdges}
 #v-world{display:none!important}
 .wvpic{position:relative;border-radius:14px;overflow:hidden;aspect-ratio:16/9;max-width:100%;background:#0B0D0A}
 .wvpic img{display:block;width:100%;height:100%;object-fit:cover}
@@ -45616,6 +45616,7 @@ $('tabs').addEventListener('click', e => { const b = e.target.closest('button[da
 
 /* ---- era switcher ---- */
 function renderEraTabs(el) {
+  if (el === 'eraTabs') { $(el).innerHTML = ERA_KEYS.map(k => `<button class="ptile" data-era="${k}" aria-pressed="${k === era}" aria-label="Era ${k} · ${esc(ERAS[k].name)}: ${esc(WORLDS[k] ? WORLDS[k].name : '')}" title="Era ${k} · ${esc(ERAS[k].name)}">${worldSVG(k, 64)}</button>`).join(''); return; }   // Tree page: image-only pixel tiles
   $(el).innerHTML = ERA_KEYS.map(k => { const c = MM.counts(PS[k], now()); return `<button data-era="${k}" aria-pressed="${k === era}">${worldSVG(k, 24)}<b>Era ${k}</b> ${ERAS[k].name}<small>${c.proven + c.thirsty}/${PS[k].order.length}</small></button>`; }).join('')
     + WORLD_KEYS.filter(k => !ERAS[k]).map(k => `<button type="button" class="soon" data-soon="${k}" aria-disabled="true" title="Era ${k} · ${GATE_WORD[k]}: coming soon"><span class="soon-band" data-short="Soon">Coming soon</span>${worldSVG(k, 24)}<b>Era ${k}</b> ${GATE_WORD[k]}</button>`).join('');
 }
@@ -45911,7 +45912,7 @@ $('treeSvg').addEventListener('click', e => { const b = e.target.closest('.br');
 $('treeSvg').addEventListener('keydown', e => { const b = e.target.closest('.br'); if (b && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); selectUnit(b.dataset.u, true); } });
 function renderTree() {
   const k = era, w = WORLDS[k]; if (!WORLD_ART[k] || !w) { renderTreeRetired(); return; }
-  $('hHead').innerHTML = `<div class="hlogo" aria-hidden="true">${worldSVG(k, 56)}</div><span class="where">Era ${k} · ${esc(ERAS[k].name)}</span><h1>${esc(w.name)}</h1><p>${esc(w.line)}</p>`;
+  $('hHead').innerHTML = `<span class="where">Era ${k} · ${esc(ERAS[k].name)}</span><h1>${esc(w.name)}</h1><p>${esc(w.line)}</p>`;
   $('hPic').innerHTML = worldPicHTML(k, worldBranches(k), selUnit);
   worldHover($('hPic'));
   wtBg('home');
