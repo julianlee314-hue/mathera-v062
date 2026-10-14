@@ -760,6 +760,24 @@ body.wt .fcard{background:#111317;border-color:rgba(255,255,255,.12)}
 .ch-card[aria-pressed=true] .ch-chosen{display:block}
 .fcard>#v-sheet{border-radius:0;padding:var(--card-pad)}
 @media (max-width:760px){.chpick .ch-cards{grid-template-columns:1fr}}
+/* === Coming-soon eras (Don) : one band treatment for Worlds panels and the era bar === */
+.eras{grid-template-columns:repeat(7,minmax(0,1fr))}
+.eras button[data-soon="VI"]::before{background-image:url("worlds/era6.jpg")}
+.eras button[data-soon="VII"]::before{background-image:url("worlds/era7.jpg")}
+.eras button.soon,.gp.later{cursor:default}
+.eras button.soon::before,.eras button.soon:hover::before{filter:grayscale(1) brightness(.38)!important}
+.eras button.soon b{opacity:.7}
+.soon-band{position:absolute;left:0;right:0;top:var(--soon-top,50%);transform:translateY(-50%);z-index:2;
+  display:block;padding:var(--soon-pad,4px) 0;text-align:center;white-space:nowrap;overflow:visible;
+  background:rgba(8,10,14,.74);border-block:1px solid rgba(232,182,83,.75);
+  color:#E8B653;font:500 var(--soon-fs,9.5px)/1 var(--mono);letter-spacing:.2em;text-indent:.2em;text-transform:uppercase;
+  text-shadow:none;pointer-events:none}
+.eras button>.soon-band{position:absolute!important;left:0;right:0;top:auto;bottom:0;transform:none;border-bottom:0}
+.eras button.soon b{transform:translateY(-9px)}
+.gp .soon-band{--soon-top:42%;--soon-fs:12.5px;--soon-pad:11px;letter-spacing:.32em;text-indent:.32em}
+.gp.later:hover img,.gp.later:focus-visible img{filter:grayscale(1) brightness(.5)!important}
+@media (hover:none){.gp.later img{filter:grayscale(1) brightness(.5)!important}}
+@media (max-width:640px){.eras .soon-band{font-size:0;letter-spacing:0;text-indent:0}.eras .soon-band::after{content:attr(data-short);font-size:8.5px;letter-spacing:.14em}}
 </style>
 <script>try{var __p=localStorage.getItem("mathera-palette");if(__p&&__p!=="garden")document.documentElement.setAttribute("data-palette",__p)}catch(e){}</script>
 
@@ -42559,7 +42577,8 @@ $('tabs').addEventListener('click', e => { const b = e.target.closest('button[da
 
 /* ---- era switcher ---- */
 function renderEraTabs(el) {
-  $(el).innerHTML = ERA_KEYS.map(k => { const c = MM.counts(PS[k], now()); return `<button data-era="${k}" aria-pressed="${k === era}"><b>Era ${k}</b> ${ERAS[k].name}${META.placed[k] ? `<small>${c.proven + c.thirsty}/${PS[k].order.length}</small>` : ERAS[k].total ? `<small>${ERAS[k].units.length < ERAS[k].total ? `preview · ${ERAS[k].units.length}/${ERAS[k].total} units` : `new · ${PS[k].order.length} skills`}</small>` : ''}</button>`; }).join('');
+  $(el).innerHTML = ERA_KEYS.map(k => { const c = MM.counts(PS[k], now()); return `<button data-era="${k}" aria-pressed="${k === era}"><b>Era ${k}</b> ${ERAS[k].name}${META.placed[k] ? `<small>${c.proven + c.thirsty}/${PS[k].order.length}</small>` : ERAS[k].total ? `<small>${ERAS[k].units.length < ERAS[k].total ? `preview · ${ERAS[k].units.length}/${ERAS[k].total} units` : `new · ${PS[k].order.length} skills`}</small>` : ''}</button>`; }).join('')
+    + WORLD_KEYS.filter(k => !ERAS[k]).map(k => `<button type="button" class="soon" data-soon="${k}" aria-disabled="true" title="Era ${k} · ${GATE_WORD[k]}: coming soon"><span class="soon-band" data-short="Soon">Coming soon</span><b>Era ${k}</b> ${GATE_WORD[k]}</button>`).join('');
 }
 function switchEra(k) { if (k === era) return; setEra(k); S = MM.session(); save(); show(META.placed[k] ? 'home' : 'welcome'); }
 ['eraTabs', 'welTabs'].forEach(id => $(id).addEventListener('click', e => { const b = e.target.closest('button[data-era]'); if (b) switchEra(b.dataset.era); }));
@@ -42673,9 +42692,10 @@ function renderGate() {
     const live = !!ERAS[k], w = WORLDS[k];
     let sub = 'Coming in Mathera 2.0';
     if (live) { const c = MM.counts(PS[k], t); sub = META.placed[k] ? `${c.proven + c.thirsty} of ${PS[k].order.length} proven` : `${PS[k].order.length} skills`; }
-    return `<button class="gp${live ? '' : ' later'}${k === era && META.placed[k] ? ' here' : ''}" data-k="${k}" aria-label="Era ${k}, ${GATE_WORD[k]}: ${esc(w.name)}. ${sub}">`
+    return `<button class="gp${live ? '' : ' later'}${k === era && META.placed[k] ? ' here' : ''}" data-k="${k}"${live ? '' : ` aria-disabled="true" title="Era ${k} · ${GATE_WORD[k]}: coming soon"`} aria-label="Era ${k}, ${GATE_WORD[k]}: ${esc(w.name)}. ${live ? sub : 'Coming soon'}">`
+      + (live ? '' : '<span class="soon-band" data-short="Soon">Coming soon</span>')
       + `<img src="${WORLD_ART[k].img}" alt="" loading="${k === 'I' || k === 'II' ? 'eager' : 'lazy'}" style="object-position:${GATE_POS[k]}">`
-      + `<span class="gl"><small>${k}</small><b>${GATE_WORD[k]}</b><em>${esc(w.name)}</em><i>${sub}</i></span></button>`;
+      + `<span class="gl"><small>${k}</small><b>${GATE_WORD[k]}</b><em>${esc(w.name)}</em>${live ? `<i>${sub}</i>` : '<i aria-hidden="true">&nbsp;</i>'}</span></button>`;
   }).join('');
   gateResults();
 }
@@ -42685,7 +42705,7 @@ function gateOpen(k) {
   show(META.placed[k] ? 'home' : 'welcome');
   curtainCall(k);
 }
-$('gPanels').addEventListener('click', e => { const b = e.target.closest('.gp[data-k]'); if (b) gateOpen(b.dataset.k); });
+$('gPanels').addEventListener('click', e => { const b = e.target.closest('.gp[data-k]'); if (b && b.getAttribute('aria-disabled') !== 'true') gateOpen(b.dataset.k); });
 
 /* Spotlight-style search over every live skill and unit */
 const gFold = s => String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/&/g, ' and ');
