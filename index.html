@@ -145,11 +145,6 @@ button.r:hover{background:var(--surface)}
 .st-withered{border-color:var(--wilt);color:var(--wilt)}
 .st-seed{color:var(--faint)}
 .shelf{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
-.inv{display:flex;flex-direction:column;align-items:center;gap:5px;padding:10px 4px;border:1px solid var(--rule);border-radius:12px;background:var(--surface);text-align:center}
-.inv svg{width:34px;height:34px}
-.inv b{font-size:11.5px;font-weight:600;line-height:1.2}
-.inv small{font-size:10.5px;color:var(--faint);line-height:1.25}
-.inv.locked svg{opacity:.25}.inv.locked b{color:var(--faint)}
 @media (max-width:480px){.shelf{grid-template-columns:repeat(3,1fr)}}
 /* welcome */
 .welcome h1{margin:0;font-size:30px;letter-spacing:-.025em;line-height:1.1}
@@ -386,7 +381,6 @@ body.focus .qbody.drill .prompt{font-size:clamp(20px,1vw + 14px,26px);color:var(
 .danger{align-self:flex-start;border:1px solid var(--rule);background:transparent;border-radius:8px;padding:6px 12px;font-size:13px;color:var(--muted)}
 .danger.arm{border-color:var(--bad);color:var(--bad)}
 .saved{font-family:var(--mono);font-size:11px;color:var(--faint);text-align:center}
-body.djwide .app{max-width:1180px}
 /* Acorn: the save code (QR stays dark-on-white in every theme so scanners can read it) */
 .acorn{display:grid;grid-template-columns:minmax(140px,210px) 1fr;gap:16px;align-items:start}
 .acorn.big{grid-template-columns:1fr}.acorn.big .acorn-qr{max-width:min(100%,520px)}
@@ -590,7 +584,6 @@ body.wt .skl .r{border-bottom-color:rgba(255,255,255,.08);border-radius:8px}
 body.wt button.r:hover{background:rgba(255,255,255,.05)}
 body.wt .skl .r .dot,body.wt .wk-list .dot,body.wt .legend i{border-radius:0 70% 0 70%}
 body.wt .chip{border-color:rgba(255,255,255,.2)}
-body.wt .inv{background:rgba(16,18,22,.62);border-color:rgba(255,255,255,.1)}
 body.wt .ulist button{background:rgba(16,18,22,.62);border-color:rgba(255,255,255,.12);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
 body.wt .ulist button:hover{border-color:#E6F58C}
 body.wt .wvlist button{background:rgba(16,18,22,.62);border-color:rgba(255,255,255,.12)}
@@ -701,14 +694,14 @@ body.wt .world .seeworld{color:#E6F58C}
 .pal button[data-v="surprise"] .sw b{display:none}
 .pal button[data-v="surprise"]{grid-column:1/-1;order:1;flex-direction:row;justify-content:center;gap:10px;padding:8px}
 .pal button[data-v="surprise"] .sw{width:30px;height:20px}
-body.focus .evline,body.djwide .evline{display:none}
+body.focus .evline{display:none}
 .evline{margin-bottom:16px}
 .pal .sw b{position:absolute;left:5px;top:8px;width:14px;height:3px;border-radius:2px;box-shadow:0 6px 0 currentColor;background:currentColor}
 /* ===== Mathera frame (Don's unified frame): one card, many contents ===== */
 :root{--frame-max:1388px;--frame-gutter:26px;--frame-h:max(calc(100svh - 220px),560px);--card-radius:16px;--card-pad:32px;--page-bg:#0C0D10}
 html,body{background:var(--page-bg)}
 body{padding-inline:0;margin:0}
-.app,body.focus .app,body.djwide .app,body.worldwide .app,body.gatewide .app,body.wt.homewide .app{max-width:none}
+.app,body.focus .app,body.worldwide .app,body.gatewide .app,body.wt.homewide .app{max-width:none}
 .top{width:min(100% - 2*var(--frame-gutter),var(--frame-max));margin-inline:auto;--bg:#0C0D10;--surface:rgba(24,26,31,.74);--ink:#F1EFE8;--muted:#B9B6AD;--faint:#8D8A82;--rule:rgba(255,255,255,.13);--key:rgba(255,255,255,.08);--keyp:rgba(255,255,255,.14);--paper:#15171B;--paper-rule:rgba(255,255,255,.1);--qpaper:#FBFBF8;--acc:#DDEB86;--acc-soft:rgba(221,235,134,.15);--on-acc:#15170D;--bad:oklch(0.72 0.14 25);--bad-soft:rgba(220,90,70,.2);--thirst:#F2B458;--thirst-soft:rgba(242,180,88,.18);--wilt:#C08A62;--bark:#C08A62;color-scheme:dark;color:var(--ink)}
 .gate,#v-loading,.evline{width:min(100% - 2*var(--frame-gutter),var(--frame-max));margin-inline:auto}
 .gpanels{height:var(--frame-h);border-radius:var(--card-radius)}
@@ -808,7 +801,6 @@ body.wt .eras button svg{color:#F4F2EC;opacity:.95}
       <button data-v="home" aria-current="false">Tree</button>
       <button data-v="id">ID card</button>
       <button data-v="rules">House Rules</button>
-      <button id="djTab" aria-current="false">DJ mode</button>
       <button class="snd" id="sndBtn" aria-pressed="true" aria-label="Sound"></button>
     </nav>
   </div>
@@ -855,8 +847,6 @@ body.wt .eras button svg{color:#F4F2EC;opacity:.95}
       <div class="upick" id="upick" role="group" aria-label="Units"></div>
       <div class="skl" id="upList"></div>
     </div>
-    <div class="sec-h"><h2>Inventions</h2><span id="invCount"></span></div>
-    <div class="shelf" id="shelf"></div>
     <div class="saved" id="savedHome"></div>
   </section>
 
@@ -947,8 +937,6 @@ body.wt .eras button svg{color:#F4F2EC;opacity:.95}
       <div class="counts" id="idCounts"></div>
       <div class="sec-h"><h2>Units</h2><span>proven of skills</span></div>
       <div class="ubars" id="idUnits"></div>
-      <div class="sec-h"><h2>Inventions collected</h2><span id="idInvN"></span></div>
-      <div class="shelf" id="idShelf"></div>
       <p class="note">Proven: step d planted and still watered. Planted: an easier step is planted. Thirsty: due for watering. Withered: dried out and waiting for an Intervention. Inferred: placed past it, not checked yet.</p>
       <div class="sec-h"><h2>This week</h2><span id="wkRange"></span></div>
       <div class="wk" id="idWeek"></div>
@@ -968,8 +956,6 @@ body.wt .eras button svg{color:#F4F2EC;opacity:.95}
     <div class="rpages" id="repPages"></div>
   </section>
 
-  <!-- DJ MODE: a classroom board for the projector -->
-  <section class="view" id="v-dj" hidden><div id="djHost"></div></section>
 
   <!-- HOUSE RULES -->
   <section class="view" id="v-rules" hidden>
@@ -45526,64 +45512,6 @@ const WHOA = [
   'Napier\'s bones (1617) were carved rods that made long multiplication quick.',
   'The abacus is still used in schools today, and some people can "see" one in their head to calculate.',
 ];
-const ICON = {
-  abacus: '<path d="M6 7h28M6 33h28M8 7v26M32 7v26M8 14h24M8 21h24M8 28h24" stroke="currentColor" stroke-width="1.6" fill="none"/><circle cx="13" cy="14" r="2.2"/><circle cx="18" cy="14" r="2.2"/><circle cx="26" cy="21" r="2.2"/><circle cx="14" cy="28" r="2.2"/><circle cx="20" cy="28" r="2.2"/><circle cx="26" cy="28" r="2.2"/>',
-  bones: '<rect x="7" y="5" width="7" height="30" rx="2" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="17" y="5" width="7" height="30" rx="2" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="27" y="5" width="7" height="30" rx="2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M7 15l7-7M7 25l7-7M17 15l7-7M17 25l7-7M27 15l7-7M27 25l7-7" stroke="currentColor" stroke-width="1"/>',
-  scales: '<path d="M20 6v26M10 34h20M8 12h24" stroke="currentColor" stroke-width="1.8" fill="none"/><path d="M8 12l-4 10h8zM32 12l-4 10h8z" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M4 22a4 3 0 0 0 8 0M28 22a4 3 0 0 0 8 0" fill="currentColor"/>',
-  sieve: '<circle cx="20" cy="20" r="14" fill="none" stroke="currentColor" stroke-width="1.8"/><g fill="currentColor"><circle cx="14" cy="14" r="1.6"/><circle cx="20" cy="14" r="1.6"/><circle cx="26" cy="14" r="1.6"/><circle cx="14" cy="20" r="1.6"/><circle cx="26" cy="20" r="1.6"/><circle cx="14" cy="26" r="1.6"/><circle cx="20" cy="26" r="1.6"/><circle cx="26" cy="26" r="1.6"/></g><circle cx="20" cy="20" r="2.6" fill="none" stroke="currentColor" stroke-width="1.4"/>',
-  papyrus: '<path d="M9 8h20a3 3 0 0 1 0 6H11v18a3 3 0 0 1-6 0V11a3 3 0 0 1 4-3z" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M15 19h10M15 24h8M15 29h10" stroke="currentColor" stroke-width="1.3"/>',
-  gears: '<circle cx="15" cy="17" r="7" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="15" cy="17" r="2" fill="currentColor"/><circle cx="27" cy="27" r="5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M15 7v3M15 24v3M5 17h3M22 17h3M8 10l2 2M20 22l2 2M8 24l2-2M20 12l2-2M27 19v2M27 33v2M19 27h2M33 27h2" stroke="currentColor" stroke-width="1.8"/>',
-  point: '<path d="M6 30h28" stroke="currentColor" stroke-width="1.5"/><text x="20" y="26" text-anchor="middle" font-family="Spline Sans Mono, monospace" font-size="13" fill="currentColor">3.14</text>',
-  balance: '<path d="M20 8v24M12 34h16M6 14h28" stroke="currentColor" stroke-width="1.8"/><rect x="5" y="17" width="8" height="6" fill="currentColor"/><circle cx="31" cy="20" r="3" fill="currentColor"/><path d="M20 8l-3-3h6z" fill="currentColor"/>',
-  protractor: '<path d="M5 30a15 15 0 0 1 30 0z" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M20 30L30 20M9 30l2-2M31 30l-2-2M20 15v3M12 19l2 2M28 19l-2 2" stroke="currentColor" stroke-width="1.4"/>',
-  chart: '<path d="M6 33h28M6 33V7" stroke="currentColor" stroke-width="1.6"/><rect x="10" y="20" width="5" height="13" fill="currentColor"/><rect x="18" y="12" width="5" height="21" fill="currentColor"/><rect x="26" y="24" width="5" height="9" fill="currentColor"/>',
-  bone: '<path d="M9 30C6 30 5 26 8 25L25 8c1-3 5-2 5 1 3 0 4 4 1 5L14 31c0 3-4 3-5-1z" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M13 23l2 2M16 20l2 2M19 17l2 2M22 14l2 2" stroke="currentColor" stroke-width="1.4"/>',
-  line: '<path d="M4 22h32M32 19l4 3-4 3M8 18v8M14 18v8M20 18v8M26 18v8" stroke="currentColor" stroke-width="1.6" fill="none"/><circle cx="20" cy="14" r="2.4"/>',
-  rods: '<path d="M8 8v24M12 8v24M16 8v24M20 8v24M24 8v24M28 8v24" stroke="currentColor" stroke-width="1.8"/><path d="M6 18h26M6 22h26" stroke="currentColor" stroke-width="2.4"/><path d="M33 12v20" stroke="currentColor" stroke-width="1.8"/>',
-  board: '<rect x="5" y="8" width="30" height="24" rx="2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M15 8v24M25 8v24" stroke="currentColor" stroke-width="1.2"/><circle cx="10" cy="14" r="2"/><circle cx="10" cy="20" r="2"/><circle cx="20" cy="14" r="2"/><circle cx="30" cy="26" r="2"/><circle cx="30" cy="20" r="2"/>',
-  loom: '<rect x="6" y="6" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M11 6v28M16 6v28M21 6v28M26 6v28M31 6v28" stroke="currentColor" stroke-width=".9"/><path d="M6 13h5v5h5v-5h5v5h5v-5h5M6 25h5v5h5v-5h5v5h5v-5h5" fill="none" stroke="currentColor" stroke-width="1.8"/>',
-  tangram: '<path d="M6 6h28v28H6z" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M6 6l28 28M34 6L20 20M13 27l14 0M20 34l7-7" stroke="currentColor" stroke-width="1.3"/><path d="M6 6h28L20 20z" fill="currentColor" opacity=".35"/>',
-  sundial: '<circle cx="20" cy="22" r="13" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M20 22L20 8l8 14z" fill="currentColor"/><path d="M20 35v-2M7 22h2M31 22h2M11 13l1.5 1.5M29 13l-1.5 1.5" stroke="currentColor" stroke-width="1.4"/>',
-  thermo: '<path d="M17 25V8a3 3 0 0 1 6 0v17a6 6 0 1 1-6 0z" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="20" cy="29" r="3"/><path d="M20 27v-9M26 12h4M26 17h4M26 22h4" stroke="currentColor" stroke-width="1.8"/>',
-  map: '<path d="M5 9l9-3 12 3 9-3v25l-9 3-12-3-9 3z" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M14 6v25M26 9v25" stroke="currentColor" stroke-width="1"/><path d="M8 35h10" stroke="currentColor" stroke-width="2"/>',
-  ledger: '<rect x="8" y="5" width="24" height="30" rx="2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M12 12h16M12 18h16M12 24h16M20 9v24" stroke="currentColor" stroke-width="1"/><text x="26" y="33" text-anchor="middle" font-family="Spline Sans Mono, monospace" font-size="9" fill="currentColor">%</text>',
-  slide: '<rect x="4" y="12" width="32" height="16" rx="2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M4 20h32" stroke="currentColor" stroke-width="1.2"/><path d="M8 12v3M12 12v2M16 12v3M22 12v2M30 12v3M10 28v-3M18 28v-2M26 28v-3" stroke="currentColor" stroke-width="1.2"/><rect x="17" y="9" width="6" height="22" fill="none" stroke="currentColor" stroke-width="1.6"/>',
-  book: '<path d="M20 10c-4-3-10-3-14-1v23c4-2 10-2 14 1 4-3 10-3 14-1V9c-4-2-10-2-14 1zM20 10v23" fill="none" stroke="currentColor" stroke-width="1.6"/><text x="13" y="24" text-anchor="middle" font-family="STIX Two Text, serif" font-style="italic" font-size="10" fill="currentColor">x</text>',
-  equals: '<path d="M6 15h28M6 25h28" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>',
-  grid: '<path d="M6 6h28v28H6zM6 13h28M6 20h28M6 27h28M13 6v28M20 6v28M27 6v28" stroke="currentColor" stroke-width=".8" fill="none"/><path d="M6 32L34 10" stroke="currentColor" stroke-width="2.2"/>',
-  pyramid: '<path d="M4 33h32L20 7z" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M20 7l4 26" stroke="currentColor" stroke-width="1.2"/><path d="M20 7l16 26h-12z" fill="currentColor" opacity=".3"/>',
-  dice: '<rect x="7" y="7" width="26" height="26" rx="5" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="14" cy="14" r="2.3"/><circle cx="26" cy="14" r="2.3"/><circle cx="20" cy="20" r="2.3"/><circle cx="14" cy="26" r="2.3"/><circle cx="26" cy="26" r="2.3"/>',
-};
-const INVENTIONS = [
-  { u: 'I.1', id: 'bone', name: 'Tally bone', what: 'Notches that count' },
-  { u: 'I.2', id: 'line', name: 'Number line', what: 'Every number has a place' },
-  { u: 'I.3', id: 'rods', name: 'Counting rods', what: 'Ten in a bundle' },
-  { u: 'I.4', id: 'board', name: 'Counting board', what: 'Pebbles that add' },
-  { u: 'I.5', id: 'loom', name: 'Loom', what: 'Patterns that repeat' },
-  { u: 'I.6', id: 'tangram', name: 'Tangram', what: 'Seven shapes, many pictures' },
-  { u: 'I.7', id: 'sundial', name: 'Sundial', what: 'Time from a shadow' },
-  { u: 'II.1', id: 'abacus', name: 'Abacus', what: 'Beads that carry' },
-  { u: 'II.2', id: 'bones', name: 'Napier\'s bones', what: 'Rods that multiply' },
-  { u: 'II.3', id: 'scales', name: 'Sharing scales', what: 'Fair shares' },
-  { u: 'II.4', id: 'sieve', name: 'Prime sieve', what: 'Only primes fall through' },
-  { u: 'II.5', id: 'papyrus', name: 'Rhind papyrus', what: 'Fractions in ink' },
-  { u: 'II.6', id: 'gears', name: 'Gear train', what: 'Turns in ratio' },
-  { u: 'II.7', id: 'point', name: 'Decimal point', what: 'Stevin\'s dot' },
-  { u: 'II.8', id: 'balance', name: 'Pan balance', what: 'Both sides equal' },
-  { u: 'II.9', id: 'protractor', name: 'Protractor', what: 'Measures a turn' },
-  { u: 'II.10', id: 'chart', name: 'Bar chart', what: 'Playfair\'s picture' },
-  { u: 'III.1', id: 'thermo', name: 'Thermometer', what: 'Numbers below zero' },
-  { u: 'III.2', id: 'map', name: 'Map scale', what: 'The world, shrunk fairly' },
-  { u: 'III.3', id: 'ledger', name: 'Ledger', what: 'Per hundred' },
-  { u: 'III.4', id: 'slide', name: 'Slide rule', what: 'Powers made easy' },
-  { u: 'III.5', id: 'book', name: 'Al-jabr', what: 'Letters for numbers' },
-  { u: 'III.6', id: 'equals', name: 'Equals sign', what: 'Recorde\'s two lines' },
-  { u: 'III.7', id: 'grid', name: 'Graph paper', what: 'Pictures of rules' },
-  { u: 'III.8', id: 'pyramid', name: 'Pyramid', what: 'Triangles that stand' },
-  { u: 'III.9', id: 'dice', name: 'Dice', what: 'Chance, counted' },
-];
-const eraInv = () => INVENTIONS.filter(i => eraOf(i.u) === era);
-const icon = id => `<svg viewBox="0 0 40 40" aria-hidden="true" fill="currentColor">${ICON[id]}</svg>`;
 // calculator policy: facts are for memory; elsewhere the calculator unlocks once the skill is proven by hand
 // Era I never has a calculator: it's where number sense is built
 const FACTS = new Set(['II.2.03', 'II.2.04', 'II.2.05', 'II.2.06', 'II.3.04', 'II.3.05', 'II.4.10', 'III.1.04', 'III.1.05', 'III.1.06', 'III.1.07', 'III.4.04', 'III.4.05', 'III.4.06']);
@@ -45998,8 +45926,6 @@ function renderUnitPanel() {
 $('upick').addEventListener('click', e => { const b = e.target.closest('button[data-u]'); if (b) selectUnit(b.dataset.u); });
 $('upList').addEventListener('click', e => { const b = e.target.closest('.r[data-sk]'); if (b) startFocus(b.dataset.sk); });
 
-const hasInv = inv => { const Px = PS[eraOf(inv.u)]; const sks = unitSkills(inv.u); return sks.filter(k => MM.proven(Px, k.id)).length >= Math.ceil(sks.length / 2); };
-function shelfHTML() { return eraInv().map(inv => { const has = hasInv(inv); return `<div class="inv ${has ? '' : 'locked'}" title="${esc(inv.what)}">${icon(inv.id)}<b>${has ? esc(inv.name) : '???'}</b><small>${has ? esc(inv.what) : 'Prove half of ' + inv.u}</small></div>`; }).join(''); }
 function fmtDur(ms) {
   const h = ms / 36e5, d = ms / 864e5;
   if (h < 1) return 'under an hour'; if (h < 20) return `${Math.round(h)} hour${Math.round(h) > 1 ? 's' : ''}`;
@@ -46024,8 +45950,6 @@ function renderHome() {
   else { const q = MM.next(P, MM.session(), t); const sk = BY[q.id]; line = `Next up: ${sk.name}, step ${q.step}`;
     const dues = ORDER.map(id => (P.skills[id] || {}).due).filter(Boolean); if (dues.length) line += ` · next watering in ${fmtDur(Math.min(...dues) - t)}`; }
   $('nextLine').textContent = line;
-  $('shelf').innerHTML = shelfHTML();
-  $('invCount').textContent = `${eraInv().filter(hasInv).length} of ${eraInv().length}`;
 }
 
 /* ---- ID card ---- */
@@ -46038,7 +45962,6 @@ function renderID() {
   $('idUnits').innerHTML = UNITS.map(([u, name]) => { const sks = unitSkills(u), n = sks.length, st = sks.map(k => MM.state(P, k.id, t));
     const seg = (k, col) => { const x = st.filter(s => k.includes(s)).length; return x ? `<i style="width:${100 * x / n}%;background:${col}"></i>` : ''; };
     return `<div class="ubar"><span>${u} ${esc(name)}</span><span class="bar">${seg(['proven'], 'var(--acc)')}${seg(['thirsty'], 'var(--thirst)')}${seg(['planted', 'growing'], 'color-mix(in oklch,var(--acc) 35%,transparent)')}${seg(['withered'], 'var(--wilt)')}</span><span class="n">${st.filter(s => s === 'proven' || s === 'thirsty').length}/${n}</span></div>`; }).join('');
-  $('idShelf').innerHTML = shelfHTML(); $('idInvN').textContent = `${eraInv().filter(hasInv).length} of ${eraInv().length}`;
   renderWeek();
   renderAcornBox('idAcorn');
 }
@@ -46794,7 +46717,6 @@ const rPS = k => RSRC ? RSRC.PS[k] : PS[k];
 const rPlaced = k => RSRC ? !!RSRC.placed[k] : !!META.placed[k];
 const rHero = () => RSRC && RSRC.name ? RSRC.name : (HEROES.find(x => x[0] === (RSRC ? RSRC.hero : RULES.hero)) || HEROES[0])[1];
 const rNem = () => NEMESES.find(x => x[0] === (RSRC ? RSRC.nemesis : RULES.nemesis)) || NEMESES[0];
-const rHasInv = inv => { const Px = rPS(eraOf(inv.u)); const sks = unitSkills(inv.u); return sks.filter(k => MM.proven(Px, k.id)).length >= Math.ceil(sks.length / 2); };
 function profileSource(a, code, name) {
   const t = now(), st = a.settings || {}, src = { PS: {}, placed: {}, hero: st.hero || RULES.hero, nemesis: st.nemesis || RULES.nemesis, name: (name || '').trim().slice(0, 40), code, journal: a.journal || { days: {} }, day: a.day, era: a.era };
   for (const k of ERA_KEYS) { const x = MM.create(ERAS[k].E.skills.map(s => s.id)); x.settings = { ...SET, pace: st.pace || SET.pace, dial: st.dial || SET.dial, brave: !!st.brave }; x.braveIds = PS[k].braveIds; src.PS[k] = x; src.placed[k] = !!((a.eras || {})[k] || {}).placed; }
@@ -46823,8 +46745,7 @@ function reportData() {
     eras.push({ k, name: ERAS[k].name, n: Px.order.length, c, units, an, rt, brave: MM.braveCounts(Px), placed: rPlaced(k), active: rPlaced(k) || c.seed < Px.order.length });
   }
   const brave = eras.reduce((s, e) => s + e.brave.e, 0), legend = eras.reduce((s, e) => s + e.brave.f, 0);
-  const invAll = INVENTIONS.map(inv => ({ ...inv, has: rHasInv(inv) }));
-  return { t, eras, total, all, answered, right, sg, dueDays, brave, legend, inv: invAll, code: RSRC ? RSRC.code : myAcorn(), journal: RSRC ? RSRC.journal : META.journal, recs: (() => { const o = {}; for (const k of ERA_KEYS) for (const id of rPS(k).order) { const r = Acorn.fromMastery(rPS(k), id); if (r) o[Acorn.serialOf(id)] = r; } return o; })() };
+  return { t, eras, total, all, answered, right, sg, dueDays, brave, legend, code: RSRC ? RSRC.code : myAcorn(), journal: RSRC ? RSRC.journal : META.journal, recs: (() => { const o = {}; for (const k of ERA_KEYS) for (const id of rPS(k).order) { const r = Acorn.fromMastery(rPS(k), id); if (r) o[Acorn.serialOf(id)] = r; } return o; })() };
 }
 
 /* PDF styles: ink saver (1-bit black and white) or colour. Leaf colours keep the same meaning in every style. */
@@ -46916,14 +46837,14 @@ function pageCover(D, data, no, pages) {
   const proven = data.all.proven + data.all.thirsty;
   const big = [['PROVEN', proven], ['GROWING', data.all.planted + data.all.growing], ['THIRSTY', data.all.thirsty], ['WITHERED', data.all.withered]];
   big.forEach(([l, v], i) => { const x = 22 + i * 42; D.box(x, 196, 38, 32, 0.45); D.font(DISPLAY, 18); D.text(String(v), x + 19, 216, 'center'); D.font(DISPLAY, 5.5); D.text(l, x + 19, 224, 'center'); });
-  const small = [['Skills in Mathera', data.total], ['Proven so far', `${Math.round(100 * proven / data.total)}%`], ['★ Brave quests', data.brave], ['★★ Legend quests', data.legend], ['Inventions', `${data.inv.filter(i => i.has).length} of ${data.inv.length}`], RSRC ? ['Questions, last 4 weeks', Acorn.journalSum(data.journal, Acorn.dayOf(data.t), 28).q.toLocaleString()] : ['Questions answered', data.answered.toLocaleString()]];
+  const small = [['Skills in Mathera', data.total], ['Proven so far', `${Math.round(100 * proven / data.total)}%`], ['★ Brave quests', data.brave], ['★★ Legend quests', data.legend], RSRC ? ['Questions, last 4 weeks', Acorn.journalSum(data.journal, Acorn.dayOf(data.t), 28).q.toLocaleString()] : ['Questions answered', data.answered.toLocaleString()]];
   small.forEach(([l, v], i) => { const x = 22 + (i % 3) * 56, y = 240 + Math.floor(i / 3) * 14; D.font(BODY, 9); D.text(l, x, y); D.fontW(MONO, 11, 500); D.text(String(v), x, y + 6); });
   D.font(BODY, 9); D.text('Proven: step d planted and still watered. Thirsty: proven, due for watering.', 105, 272, 'center');
 }
 
 function legendRow(D, x, y, states) { let xx = x; D.font(BODY, 8.5); for (const st of states) { D.sprite(st, xx, y - 3.4, 0.5); D.text(STATE_LABEL[st], xx + 5.5, y); xx += 7 + D.width(STATE_LABEL[st]) + 5; } }
 
-function pageGlance(D, data, no, pages, icons) {
+function pageGlance(D, data, no, pages) {
   frame(D, 'THE GARDEN AT A GLANCE', no, pages, data);
   const proven = data.all.proven + data.all.thirsty, busiest = data.eras.slice().sort((a, b) => (b.n - b.c.seed) - (a.n - a.c.seed))[0];
   D.fontW(BODY, 13, 600); D.wrap(`You have proven ${proven} of ${data.total} skills.${busiest && busiest.n - busiest.c.seed ? ` Era ${busiest.k} is where most of your tree is growing.` : ''}`, 18, 38, 174, 6.5);
@@ -46950,12 +46871,6 @@ function pageGlance(D, data, no, pages, icons) {
   const growing = data.eras.flatMap(e => e.units.flatMap(u => u.sks.filter(s => s.st === 'growing' || s.st === 'planted').map(s => ({ ...s, u: u.u })))).slice(0, 6);
   if (!growing.length) { D.font(BODY, 10); D.text('Nothing half-grown right now. Continue picks the next seed.', 18, 227); }
   growing.forEach((s, i) => { const y = 226 + i * 6.5; D.sprite(s.st, 18, y - 3.6, 0.5); D.font(MONO, 8.5); D.text(s.id, 24.5, y); D.font(BODY, 9.5); D.text(D.fit(s.name, 140), 44, y); });
-  // inventions shelf (icons drawn from the app's own SVGs)
-  D.font(DISPLAY, 6.5); D.text('INVENTIONS', 18, 268 - 10);
-  const got = data.inv.filter(i => i.has);
-  if (!got.length) { D.font(BODY, 9.5); D.text('Prove half of a unit to collect its invention.', 18, 266); }
-  got.slice(0, 16).forEach((inv, i) => { const img = icons[inv.id]; if (img) D.ctx.drawImage(img, D.X(18 + i * 11), D.X(261), D.X(8), D.X(8)); });
-  if (got.length) { D.font(BODY, 8.5); D.text(D.fit(`${got.length} of ${data.inv.length}: ${got.map(i => i.name).join(', ')}`, 174), 18, 274.5); }
 }
 
 function pageStudy(D, data, no, pages) {
@@ -47237,22 +47152,14 @@ function buildPDF(pages) {
 }
 
 let REPORT = null;   // { blob, name }
-async function loadIcons() {
-  const out = {};
-  await Promise.all(INVENTIONS.map(inv => new Promise(res => {
-    const img = new Image(); img.onload = () => { out[inv.id] = img; res(); }; img.onerror = res;
-    img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" width="160" height="160" fill="#000" color="#000">${ICON[inv.id]}</svg>`);
-  })));
-  return out;
-}
 async function makeReport(onProgress) {
   try { await Promise.all([`20px ${DISPLAY}`, `20px ${BODY}`, `600 20px ${BODY}`, `700 20px ${BODY}`, `20px ${MONO}`].map(f => document.fonts.load(f, 'A★'))); } catch (e) {}
   RSTY = pdfStyle(RULES.pdfStyle || 'herbarium');
-  const data = reportData(), icons = await loadIcons();
+  const data = reportData();
   const eraPages = data.eras.filter(e => e.active), tp = treeprintData(data), kind = RULES.pdfKind === 'field' ? 'field' : 'treeprint';
   const steps = [(D, no) => pageTreeprint(D, data, tp, no, N), (D, no) => pageGrownups(D, data, tp, no, N)];
   if (kind === 'field') {
-    if (eraPages.length <= 4) steps.push((D, no) => pageGlance(D, data, no, N, icons));
+    if (eraPages.length <= 4) steps.push((D, no) => pageGlance(D, data, no, N));
     steps.push((D, no) => pageStudy(D, data, no, N), (D, no) => pageWatering(D, data, no, N), ...eraPages.map(e => (D, no) => pageEra(D, e, data, no, N)));
   }
   steps.push((D, no) => pageAcorn(D, data, no, N));
@@ -47505,370 +47412,4 @@ window.__mathera = { celebrate: (...a) => celebrate(...a), force: (id, step, dri
 })();
 
 </script>
-<script>
-function DJ_BOOT(ROOT) {
-(function(){
-'use strict';
-ROOT.addEventListener('dj-show', () => { if (typeof renderSetup === 'function') renderSetup(); });
-const $ = id => ROOT.getElementById(id);
-const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
-/* ---------- content index (same unit names as the main app) ---------- */
-const UNITS = {
-  'I.1':'Counting','I.2':'Comparing & ordering','I.3':'Place value','I.4':'Addition & subtraction','I.5':'Patterns & logic','I.6':'Shape & space','I.7':'Measure & data',
-  'II.1':'Place value to millions','II.2':'Multiplication','II.3':'Division','II.4':'Factors & multiples','II.5':'Fractions I','II.6':'Fractions II','II.7':'Decimals','II.8':'Expressions','II.9':'Measurement & geometry','II.10':'Data',
-  'III.1':'Integers & rationals','III.2':'Ratios & rates','III.3':'Percent','III.4':'Exponents & roots','III.5':'Expressions','III.6':'Equations & inequalities','III.7':'Lines & first functions','III.8':'Basic Non-Proof Geometry','III.9':'Statistics & probability',
-  'IV.1':'Equations & inequalities','IV.2':'Functions','IV.3':'Linear functions','IV.4':'Systems','IV.5':'Exponents & radicals','IV.6':'Polynomials','IV.7':'Quadratics','IV.8':'Complex numbers','IV.9':'Function toolkit','IV.10':'Polynomial functions','IV.11':'Rational & radical functions','IV.12':'Exponential & logarithmic','IV.13':'Sequences & series','IV.14':'Counting & probability','IV.15':'Data & distributions',
-  'V.1':'Logic & proof','V.2':'Lines & angles','V.3':'Triangles','V.4':'Polygons','V.5':'Similarity','V.6':'Right-triangle trig','V.7':'General triangles','V.8':'Circles','V.9':'Trig functions','V.10':'Identities & equations','V.11':'Coordinate geometry','V.12':'Conic sections','V.13':'Transformations','V.14':'Solids','V.15':'Constructions'};
-const ENGS = { I: window.E1, II: window.E2, III: window.E3, IV: window.E4, V: window.E5, VI: window.E6, VII: window.E7 };
-if (typeof MATHERA_DATA !== 'undefined') for (const [b, nm] of Object.entries(MATHERA_DATA.branches)) if (!UNITS[b]) UNITS[b] = nm;
-const eraOf = id => id.split('.')[0];
-const unitOf = id => id.split('.').slice(0, 2).join('.');
-const ALL = [];
-for (const k in ENGS) { const E = ENGS[k]; if (!E) continue; for (const s of E.skills) ALL.push({ id: s.id, name: s.name, era: k, u: unitOf(s.id), steps: Object.keys(s.steps), sk: s, E, hay: (s.id + ' ' + s.name + ' ' + (UNITS[unitOf(s.id)] || '') + ' ' + Object.values(s.steps).map(x => x.t).join(' ')).toLowerCase() }); }
-const BY = Object.fromEntries(ALL.map(s => [s.id, s]));
-const STEPNAME = { e: '★', f: '★★' };
-const OPTS = { coins: 'US', units: 'metric', clock: '12h' };
-
-/* ---------- settings (kept on this device only) ---------- */
-const GCOL = ['--g1', '--g2', '--g3'];
-const DEF = { groups: [{ name: 'Whole class', n: 12, pl: [] }, { name: 'Group B', n: 8, pl: [] }, { name: 'Group C', n: 8, pl: [] }], g: 1, cur: 0, mins: 10, round: 0, auto: 'next', asp: 'screen', look: 'bright', wsp: 45, edge: 3, bot: 8 };
-let ST;
-try { ST = JSON.parse(localStorage.getItem('mathera-dj') || 'null'); } catch (e) { ST = null; }
-if (!ST || !ST.groups) ST = JSON.parse(JSON.stringify(DEF));
-if (ST.v !== 2) { ST.v = 2; ST.round = 0; }   // the board is untimed unless the teacher turns a clock on
-const save = () => { try { localStorage.setItem('mathera-dj', JSON.stringify(ST)); } catch (e) {} };
-
-/* ---------- auto layout ---------- */
-// Split the usable board into one region per group (side by side on a wide screen, stacked on a tall one),
-// sized by how many areas each group has; then give each region the rows × columns that make the biggest cells
-// near a 4:3 writing shape.
-const TARGET = 1.3;
-function bestGrid(w, h, n) {
-  let best = null;
-  for (let c = 1; c <= n; c++) {
-    const r = Math.ceil(n / c), cw = w / c, ch = h / r;
-    const size = Math.min(cw, ch * TARGET);          // the largest 4:3-ish box that fits a cell
-    const waste = (r * c - n) / (r * c);
-    const score = size * (1 - waste * 0.35);
-    if (!best || score > best.score) best = { c, r, score };
-  }
-  return best;
-}
-function layout(W, H, groups) {
-  const tot = groups.reduce((a, g) => a + g.n, 0), out = [], side = W >= H;
-  const gapR = groups.length > 1 ? Math.min(W, H) * 0.035 : 0;
-  let off = 0; const span = (side ? W : H) - gapR * (groups.length - 1);
-  groups.forEach((g, gi) => {
-    const len = span * g.n / tot;
-    const rx = side ? off : 0, ry = side ? 0 : off, rw = side ? len : W, rh = side ? H : len;
-    off += len + gapR;
-    const gr = bestGrid(rw, rh, g.n), gap = Math.min(rw / gr.c, rh / gr.r) * 0.06;
-    const cw = (rw - gap * (gr.c - 1)) / gr.c, chh = (rh - gap * (gr.r - 1)) / gr.r;
-    const cells = [];
-    for (let i = 0; i < g.n; i++) {
-      const row = Math.floor(i / gr.c), inRow = row === gr.r - 1 ? g.n - row * gr.c : gr.c;
-      const shift = (gr.c - inRow) * (cw + gap) / 2;      // center a short last row
-      cells.push({ x: rx + shift + (i % gr.c) * (cw + gap), y: ry + row * (chh + gap), w: cw, h: chh });
-    }
-    out.push({ gi, x: rx, y: ry, w: rw, h: rh, c: gr.c, r: gr.r, cells });
-  });
-  return out;
-}
-function usable(W, H) {
-  const e = ST.edge / 100 * Math.min(W, H), b = ST.bot / 100 * H, bar = barH(H);
-  const top = e + bar + (activeGroups().length > 1 ? 22 : 0);
-  return { x: e, y: top, w: W - 2 * e, h: H - top - Math.max(e, b) };
-}
-const barH = H => Math.max(22, Math.round(H * 0.035));
-const activeGroups = () => ST.groups.slice(0, ST.g);
-const ASPECTS = { screen: null, '16:9': 16 / 9, '16:10': 1.6, '4:3': 4 / 3, '2:1': 2 };
-
-/* ---------- setup UI ---------- */
-function seg(id, opts, val, set) {
-  $(id).innerHTML = opts.map(([v, l]) => `<button data-v="${v}" aria-pressed="${String(v) === String(val)}">${l}</button>`).join('');
-  $(id).onclick = e => { const b = e.target.closest('button'); if (!b) return; set(b.dataset.v); save(); renderSetup(); };
-}
-function renderSetup() {
-  seg('gcount', [[1, 'One'], [2, 'Two'], [3, 'Three']], ST.g, v => { ST.g = +v; if (ST.cur >= ST.g) ST.cur = 0; });
-  $('gtabs').innerHTML = activeGroups().map((g, i) => `<button class="gtab" style="--gc:var(${GCOL[i]})" data-i="${i}" aria-pressed="${i === ST.cur}"><i></i>${esc(g.name)}<small>${g.n} areas · ${g.pl.length} levels</small></button>`).join('');
-  const G = ST.groups[ST.cur];
-  if (ROOT.activeElement !== $('gname')) $('gname').value = G.name;
-  $('aN').textContent = G.n;
-  $('plLab').textContent = `${G.name}'s playlist`;
-  $('chips').innerHTML = G.pl.length ? G.pl.map((k, i) => { const [id, st] = splitKey(k), s = BY[id]; return s ? `<span class="chip" title="${esc(s.sk.steps[st].t)}"><b>${id}.${st}</b><span>${esc(s.name)}</span><button data-i="${i}" aria-label="Remove ${id}.${st}">×</button></span>` : ''; }).join('') : '<span class="empty">No levels yet. Search below and tap a step (a easiest, d hardest).</span>';
-  seg('roundSeg', [[0, 'Off'], [30, '30 s'], [60, '1 min'], [90, '1½ min'], [120, '2 min'], [180, '3 min']], ST.round, v => ST.round = +v);
-  seg('autoSeg', [['next', 'Next round'], ['wait', 'Wait for me']], ST.auto, v => ST.auto = v);
-  seg('aspSeg', [['screen', 'This screen'], ['16:9', '16:9'], ['16:10', '16:10'], ['4:3', '4:3'], ['2:1', 'Wide board']], ST.asp, v => ST.asp = v);
-  seg('lookSeg', [['bright', 'Bright'], ['dim', 'Dim']], ST.look, v => ST.look = v);
-  $('clockOpts').hidden = !ST.round;
-  $('mins').value = ST.mins; $('minsV').textContent = ST.mins + ' min';
-  $('wsp').value = ST.wsp; $('wspV').textContent = ST.wsp + '%';
-  $('edge').value = ST.edge; $('edgeV').textContent = ST.edge + '%';
-  $('bot').value = ST.bot; $('botV').textContent = ST.bot + '%';
-  renderPreview();
-  const ready = activeGroups().every(g => g.pl.length);
-  $('startBtn').disabled = !ready;
-  const rounds = ST.round ? Math.max(1, Math.floor(ST.mins * 60 / ST.round)) : null;
-  const areas = activeGroups().reduce((a, g) => a + g.n, 0);
-  $('sum').textContent = ready ? `${areas} question areas · ${rounds ? rounds + ' rounds of ' + fmt(ST.round) + ' · about ' + rounds * areas + ' questions' : 'no clock, you move on with → when the class is ready'}` : 'Give every group at least one level to start.';
-}
-function renderPreview() {
-  const a = ASPECTS[ST.asp] || (screen.width / screen.height) || 16 / 9;
-  const pv = $('preview'), W = pv.clientWidth || 400, H = W / a;
-  pv.style.height = H + 'px';
-  const sc = 1000 / W, U = usable(1000, H * sc);
-  const L = layout(U.w, U.h, activeGroups());
-  let h = `<div class="safe" style="left:${U.x / sc}px;top:${U.y / sc}px;width:${U.w / sc}px;height:${U.h / sc}px"></div>`;
-  L.forEach(R => R.cells.forEach((c, i) => { h += `<div class="pc" style="--gc:var(${GCOL[R.gi]});left:${(U.x + c.x) / sc}px;top:${(U.y + c.y) / sc}px;width:${c.w / sc}px;height:${c.h / sc}px">${'ABC'[R.gi]}${i + 1}</div>`; }));
-  pv.innerHTML = h;
-}
-const splitKey = k => { const i = k.lastIndexOf('.'); return [k.slice(0, i), k.slice(i + 1)]; };
-const fmt = s => s >= 60 ? (Math.floor(s / 60) + (s % 60 ? ':' + String(s % 60).padStart(2, '0') : ' min')) : s + ' s';
-
-let hits = [];
-function renderSearch() {
-  const t = $('q').value.trim().toLowerCase(), G = ST.groups[ST.cur], have = new Set(G.pl);
-  if (!t) { hits = []; $('results').innerHTML = ''; $('addAll').hidden = true; return; }
-  const words = t.split(/\s+/);
-  hits = ALL.filter(s => words.every(w => s.hay.includes(w) || s.id.toLowerCase().startsWith(w)));
-  $('addAll').hidden = hits.length < 2;
-  $('addAllN').textContent = `Add all ${Math.min(hits.length, 40)} at step`;
-  $('addAllSteps').innerHTML = 'abcd'.split('').map(k => `<button data-k="${k}">${k}</button>`).join('');
-  $('results').innerHTML = hits.slice(0, 60).map(s => `<div class="res"><div class="nm"><b>${s.id}</b>${esc(s.name)}<small>Era ${s.era} · ${esc(UNITS[s.u] || s.u)}</small></div><div class="steps">${s.steps.map(k => `<button data-id="${s.id}" data-k="${k}" class="${have.has(s.id + '.' + k) ? 'on' : ''} ${STEPNAME[k] ? 'br' : ''}" title="${esc(s.sk.steps[k].t)}">${STEPNAME[k] || k}</button>`).join('')}</div></div>`).join('') || '<p class="hint" style="padding:10px 0">No skill matches that. Try a shorter word, or a unit code like II.5.</p>';
-}
-function toggleLevel(key) { const G = ST.groups[ST.cur], i = G.pl.indexOf(key); if (i >= 0) G.pl.splice(i, 1); else G.pl.push(key); save(); renderSetup(); renderSearch(); }
-
-function wire() {
-  $('gtabs').onclick = e => { const b = e.target.closest('.gtab'); if (!b) return; ST.cur = +b.dataset.i; save(); renderSetup(); renderSearch(); };
-  $('gname').oninput = () => { ST.groups[ST.cur].name = $('gname').value || 'Group'; save(); renderSetup(); };
-  $('aMinus').onclick = () => { const G = ST.groups[ST.cur]; G.n = Math.max(1, G.n - 1); save(); renderSetup(); };
-  $('aPlus').onclick = () => { const G = ST.groups[ST.cur]; G.n = Math.min(30, G.n + 1); save(); renderSetup(); };
-  $('chips').onclick = e => { const b = e.target.closest('button'); if (!b) return; ST.groups[ST.cur].pl.splice(+b.dataset.i, 1); save(); renderSetup(); renderSearch(); };
-  $('q').oninput = renderSearch;
-  $('results').onclick = e => { const b = e.target.closest('button[data-id]'); if (b) toggleLevel(b.dataset.id + '.' + b.dataset.k); };
-  $('addAllSteps').onclick = e => { const b = e.target.closest('button'); if (!b) return; const G = ST.groups[ST.cur]; hits.slice(0, 40).forEach(s => { const k = s.id + '.' + b.dataset.k; if (s.steps.includes(b.dataset.k) && !G.pl.includes(k)) G.pl.push(k); }); save(); renderSetup(); renderSearch(); };
-  $('clearBtn').onclick = () => { ST.groups[ST.cur].pl = []; save(); renderSetup(); renderSearch(); };
-  $('sampleBtn').onclick = () => {
-    const pickU = (u, st, k) => ALL.filter(s => s.u === u && s.steps.includes(st)).slice(0, k).map(s => s.id + '.' + st);
-    ST.g = 3; ST.cur = 0;
-    ST.groups = [
-      { name: 'Table 1 · times tables', n: 8, pl: pickU('II.2', 'b', 6) },
-      { name: 'Table 2 · integers', n: 8, pl: pickU('III.1', 'c', 6) },
-      { name: 'Table 3 · equations', n: 6, pl: pickU('IV.1', 'b', 5) }];
-    save(); renderSetup(); renderSearch();
-  };
-  for (const [id, key] of [['mins', 'mins'], ['wsp', 'wsp'], ['edge', 'edge'], ['bot', 'bot']]) $(id).oninput = () => { ST[key] = +$(id).value; save(); renderSetup(); };
-  $('startBtn').onclick = start;
-  addEventListener('resize', () => { if (!$('board').hidden) placeBoard(); else renderPreview(); });
-}
-
-/* ---------- questions ---------- */
-function makeQ(key, seed, avoid) {
-  const [id, st] = splitKey(key), s = BY[id];
-  for (let t = 0; t < 12; t++) {
-    try {
-      const q = s.sk.steps[st].g(s.E.rng(seed + t * 104729), OPTS);
-      if (q.flash) continue;                                   // flash pictures disappear: not for a board
-      const p = plain(q.prompt) + (q.visual ? '#' + t : '');
-      if (avoid && avoid.has(p) && t < 11) continue;
-      if (avoid) avoid.add(p);
-      return { key, q, s };
-    } catch (e) { /* try another seed */ }
-  }
-  return { key, s, q: { prompt: 'This level could not build a question. Click to swap it.', kind: 'none' } };
-}
-const plain = h => { const d = document.createElement('div'); d.innerHTML = h || ''; return d.textContent.trim(); };
-function showField(s, f) {
-  const lab = (f.label || '').trim();
-  if (/[$฿]/.test(lab) && typeof f.ans === 'number' && !f.frac) { const v = Math.abs(f.ans).toFixed(2); return /^[$฿]$/.test(lab) ? (f.ans < 0 ? '−' : '') + lab + v : esc(lab) + ' ' + v; }
-  const E = s.E, body = E.showHTML ? E.showHTML(f) : esc((E.show || E2.show)(f));
-  return (lab ? esc(lab) + ' ' : '') + body;
-}
-const LET = 'ABCDEFGH';
-function answerHTML(it) {
-  const q = it.q;
-  if (q.kind === 'num') return q.fields.map(f => showField(it.s, f)).join(' · ');
-  if (q.kind === 'choice') { const c = q.choices[q.ans]; return LET[q.ans] + (c.trim().startsWith('<svg') ? '' : ' · ' + (it.s.era === 'I' ? esc(c) : c)); }
-  if (q.kind === 'order') return q.ans.map(i => LET[i]).join(' → ');
-  return '';
-}
-function cellHTML(it, label) {
-  const q = it.q, I = it.s.era === 'I';
-  let qb = `<div class="qp">${q.prompt}</div>`;
-  if (q.visual) qb += `<div class="qv">${q.visual}</div>`;
-  if (q.kind === 'choice') qb += `<div class="qc">${q.choices.map((c, i) => `<span class="ch"><b>${LET[i]}</b>${c.trim().startsWith('<svg') || !I ? c : esc(c)}</span>`).join('')}</div>`;
-  if (q.kind === 'order') qb += `<div class="qo">${q.items.map((c, i) => `<div><b>${LET[i]}</b><span>${c}</span></div>`).join('')}</div>`;
-  let ws = '';
-  if (q.kind === 'num') { const labs = q.fields.map(f => f.label).filter(Boolean); if (labs.length || q.fields.length > 1) ws = q.fields.map((f, i) => `<div class="bl"><span>${esc(f.label || (i + 1) + '.')}</span><i></i></div>`).join(''); }
-  else if (q.kind === 'choice') ws = '<div class="bl"><span>Letter</span><i></i></div>';
-  else if (q.kind === 'order') ws = '<div class="bl"><span>Order</span><i></i></div>';
-  const st = splitKey(it.key)[1];
-  return `<span class="tag">${label}</span><span class="lvl" title="${esc(it.s.name)}">${it.s.id} · ${STEPNAME[st] || st}</span><div class="tools"><button data-act="down" title="Easier">−</button><button data-act="new" title="New question">↻</button><button data-act="up" title="Harder">+</button></div><div class="q">${qb}</div><div class="ws">${ws}</div><div class="ans" hidden>${answerHTML(it)}</div>`;
-}
-
-/* ---------- board ---------- */
-let RUN = null;   // {rounds:[[items per group]], at, left, paused, total, reveal}
-function deal() {
-  const avoid = new Set();
-  return activeGroups().map(g => {
-    const order = shuffle(g.pl.slice());
-    return Array.from({ length: g.n }, (_, i) => makeQ(order[i % order.length], 1 + Math.floor(Math.random() * 1e6), avoid));
-  });
-}
-const shuffle = a => { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
-function start() {
-  const total = ST.round ? Math.max(1, Math.floor(ST.mins * 60 / ST.round)) : null;
-  RUN = { rounds: [deal()], at: 0, left: ST.round, paused: false, total, reveal: false };
-  $('setup').hidden = true; const b = $('board'); b.hidden = false; b.className = ST.look;
-  try { const p = b.requestFullscreen && b.requestFullscreen(); if (p && p.catch) p.catch(() => {}); } catch (e) {}
-  try { navigator.wakeLock && navigator.wakeLock.request('screen').catch(() => {}); } catch (e) {}
-  placeBoard(); tick.id = setInterval(tick, 1000);
-}
-function stop() {
-  clearInterval(tick.id); RUN = null; $('board').hidden = true; $('setup').hidden = false;
-  if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
-  renderSetup();
-}
-function placeBoard() {
-  const b = $('board'), W = b.clientWidth, H = b.clientHeight, U = usable(W, H), L = layout(U.w, U.h, activeGroups());
-  b.style.setProperty('--barh', barH(H) + 'px');
-  const items = RUN.rounds[RUN.at];
-  let h = '';
-  L.forEach(R => {
-    const g = activeGroups()[R.gi];
-    if (ST.g > 1) h += `<div class="region" style="--gc:var(${GCOL[R.gi]});left:${U.x + R.x}px;top:${U.y + R.y - 10}px;width:${R.w}px;height:0"><span class="rname">${esc(g.name)}</span><div class="tools" data-g="${R.gi}" style="--gc:var(${GCOL[R.gi]})"><button data-act="down" title="Whole group easier">− easier</button><button data-act="new" title="New questions for this group">↻ new</button><button data-act="up" title="Whole group harder">+ harder</button></div></div>`;
-    R.cells.forEach((c, i) => {
-      const it = items[R.gi][i], lab = (ST.g > 1 ? 'ABC'[R.gi] : '') + (i + 1), s = Math.min(c.w, c.h * 1.3);
-      h += `<div class="cell" data-g="${R.gi}" data-i="${i}" style="--gc:var(${GCOL[R.gi]});left:${U.x + c.x}px;top:${U.y + c.y}px;width:${c.w}px;height:${c.h}px;--tagf:${Math.max(11, s * .045)}px;--wsf:${Math.max(11, s * .05)}px;--ansf:${Math.max(12, s * .06)}px">${cellHTML(it, lab)}</div>`;
-    });
-  });
-  $('cells').innerHTML = h;
-  ROOT.querySelectorAll('#cells .cell').forEach(fit);
-  showReveal(); renderBar();
-}
-// shrink each question until it fits the top part of its cell, leaving the writing space free
-function fit(cell) {
-  cell.querySelectorAll('.fr').forEach(f => [...f.childNodes].forEach(n => { if (n.nodeType === 3) n.remove(); }));
-  const qd = cell.querySelector('.q'), H = cell.clientHeight * (1 - ST.wsp / 100), W = cell.clientWidth;
-  qd.style.height = H + 'px';
-  const svgs = [...cell.querySelectorAll('.qv svg')].map(x => [x, .5]).concat([...cell.querySelectorAll('.qc .ch svg')].map(x => [x, .22]));
-  svgs.forEach(([x]) => { x.removeAttribute('width'); x.removeAttribute('height'); x.style.width = 'auto'; x.style.maxWidth = 'none'; x.style.flex = 'none'; });
-  const over = () => qd.scrollHeight > qd.clientHeight + 1 || qd.scrollWidth > qd.clientWidth + 1;
-  const fs0 = Math.min(W * .085, H * .2);
-  let k = 1;
-  const apply = () => { qd.style.fontSize = fs0 * k + 'px'; svgs.forEach(([x, f]) => x.style.height = H * f * Math.min(1, k * 1.25) + 'px'); };
-  apply();
-  while (over() && k > .1) { k *= .9; apply(); }
-}
-function renderBar() {
-  const r = RUN, tl = r.left;
-  const left = ST.round ? `<span class="tm ${tl <= 10 ? 'low' : ''}">${r.paused ? 'paused · ' : ''}${Math.floor(tl / 60)}:${String(tl % 60).padStart(2, '0')}</span>` : '<span>→ new questions · ↑ ↓ harder or easier · click a square</span>';
-  const pct = ST.round ? (1 - tl / ST.round) * 100 : 0;
-  $('bbar').innerHTML = `<span>${r.total ? 'Round ' + (r.at + 1) + ' of ' + r.total : 'Board ' + (r.at + 1)}</span>${left}<span>${r.reveal ? 'answers showing · ' : ''}<button id="bExit">Setup</button></span><i class="prog" style="width:${pct}%"></i>`;
-  $('bExit').onclick = stop;
-}
-function tick() {
-  if (!RUN || !ST.round || RUN.paused) return;
-  RUN.left = Math.max(0, RUN.left - 1);
-  if (RUN.left === 0) {
-    $('timeup').classList.add('on'); setTimeout(() => $('timeup').classList.remove('on'), 1600);
-    if (ST.auto === 'next' && (!RUN.total || RUN.at + 1 < RUN.total)) { setTimeout(() => RUN && next(1), 1700); RUN.paused = true; }
-    else RUN.paused = true;
-  }
-  renderBar();
-}
-// → keeps every square at its current level and deals a fresh question; ← steps back through earlier boards
-function next(d) {
-  if (d > 0) {
-    if (RUN.total && RUN.at + 1 >= RUN.total) { toast('That was the last round. Esc goes back to setup.'); renderBar(); return; }
-    const cur = RUN.rounds[RUN.at], avoid = new Set();
-    RUN.rounds = RUN.rounds.slice(0, RUN.at + 1);
-    RUN.rounds.push(cur.map(g => g.map(it => makeQ(it.key, rseed(), avoid)))); RUN.at++;
-  } else { if (RUN.at === 0) return; RUN.at--; }
-  RUN.left = ST.round; RUN.paused = false; RUN.reveal = false; placeBoard();
-  ROOT.querySelectorAll('#cells .cell').forEach(c => c.classList.add('fresh'));
-}
-const rseed = () => 1 + Math.floor(Math.random() * 1e6);
-// difficulty: move a level along its own skill's steps a → b → c → d → ★ → ★★ (only the steps that skill has)
-const ORDER = 'abcdef';
-function shiftKey(key, dir) {
-  const [id, st] = splitKey(key), ladder = BY[id].steps.slice().sort((x, y) => ORDER.indexOf(x) - ORDER.indexOf(y));
-  const j = ladder.indexOf(st) + dir;
-  return j < 0 || j >= ladder.length ? null : id + '.' + ladder[j];
-}
-// act on a set of squares: dir 0 = new question at the same level, +1 harder, −1 easier
-function act(targets, dir) {
-  const items = RUN.rounds[RUN.at], avoid = new Set();
-  let moved = 0, stuck = 0;
-  targets.forEach(([g, i]) => {
-    let key = items[g][i].key;
-    if (dir) { const k2 = shiftKey(key, dir); if (k2) { key = k2; moved++; } else stuck++; }
-    items[g][i] = makeQ(key, rseed(), avoid);
-    const c = ROOT.querySelector(`#cells .cell[data-g="${g}"][data-i="${i}"]`);
-    if (c) { const lab = c.querySelector('.tag').textContent; c.innerHTML = cellHTML(items[g][i], lab); fit(c); c.classList.remove('fresh'); void c.offsetWidth; c.classList.add('fresh'); }
-  });
-  showReveal();
-  if (dir) {
-    const word = dir > 0 ? 'harder' : 'easier', edge = dir > 0 ? 'hardest' : 'easiest';
-    if (targets.length === 1) toast(moved ? `One step ${word}` : `Already the ${edge} step of this skill. New question at the same level.`);
-    else toast(`${moved} square${moved === 1 ? '' : 's'} one step ${word}` + (stuck ? `, ${stuck} already at the ${edge} step` : ''));
-  }
-}
-const allCells = g => { const out = [], items = RUN.rounds[RUN.at]; items.forEach((grp, gi) => { if (g == null || g === gi) grp.forEach((_, i) => out.push([gi, i])); }); return out; };
-let toastT;
-function toast(msg) { const t = $('toast'); t.textContent = msg; t.classList.add('on'); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('on'), 2200); }
-function showReveal() { ROOT.querySelectorAll('#cells .ans').forEach(a => a.hidden = !RUN.reveal); }
-$('cells').onclick = e => {
-  if (!RUN) return;
-  const b = e.target.closest('.tools button'), dir = b ? { down: -1, new: 0, up: 1 }[b.dataset.act] : 0;
-  const gt = e.target.closest('.region .tools');
-  if (gt) { if (b) act(allCells(+gt.dataset.g), dir); return; }
-  const c = e.target.closest('.cell'); if (!c) return;
-  act([[+c.dataset.g, +c.dataset.i]], dir);
-};
-addEventListener('keydown', e => {
-  if (!RUN || $('board').hidden) return;
-  const k = e.key;
-  if (k === 'ArrowRight' || k === 'n' || k === 'N' || k === 'PageDown') { next(1); e.preventDefault(); }
-  else if (k === 'ArrowLeft' || k === 'PageUp') { next(-1); e.preventDefault(); }
-  else if (k === 'ArrowUp' || k === '+' || k === '=') { act(allCells(), 1); e.preventDefault(); }
-  else if (k === 'ArrowDown' || k === '-' || k === '_') { act(allCells(), -1); e.preventDefault(); }
-  else if (k === 'r' || k === 'R') { RUN.rounds = RUN.rounds.slice(0, RUN.at + 1); RUN.rounds.push(deal()); RUN.at++; RUN.left = ST.round; RUN.reveal = false; placeBoard(); toast('Fresh board from the playlists'); }
-  else if (k === 'a' || k === 'A') { RUN.reveal = !RUN.reveal; showReveal(); renderBar(); }
-  else if (k === ' ') { if (ST.round) { RUN.paused = !RUN.paused; renderBar(); } e.preventDefault(); }
-  else if (k === 'f' || k === 'F') { const b = $('board'); if (document.fullscreenElement) document.exitFullscreen().catch(() => {}); else if (b.requestFullscreen) b.requestFullscreen().catch(() => {}); }
-  else if (k === 'Escape') { if (!document.fullscreenElement) stop(); }
-});
-document.addEventListener('fullscreenchange', () => { if (RUN) setTimeout(placeBoard, 60); });
-
-/* ---------- boot ---------- */
-if (!ALL.length) { $('loading').textContent = 'The question engine did not load. Reload the page to try again.'; return; }
-$('loading').hidden = true; $('cols').hidden = false;
-if (!ST.groups.some(g => g.pl.length)) { wire(); $('sampleBtn').click(); ST.g = 1; ST.groups[0].name = 'Whole class'; ST.groups[0].n = 12; ST.groups[0].pl = ALL.filter(s => s.u === 'II.2').slice(0, 8).map(s => s.id + '.b'); save(); renderSetup(); }
-else { wire(); renderSetup(); }
-})();
-
-}
-</script>
-
-<!-- DJ MODE (classroom board): self-contained, lives in a shadow root so its styles never touch the app -->
-<script>
-(function () {
-  const tab = document.getElementById('djTab'), view = document.getElementById('v-dj'), host = document.getElementById('djHost');
-  let booted = false;
-  const ROOT = host.attachShadow({ mode: 'open' });
-  ROOT.innerHTML = '<style>' + ":host{--g1:oklch(0.55 0.14 250);--g2:oklch(0.6 0.15 55);--g3:oklch(0.55 0.15 330);--b-bg:#FFFFFF;--b-ink:#101114;--b-line:#C9CDD4;--b-mut:#5D636E}\n@media (prefers-color-scheme: dark){:host-context(:root:not([data-theme=\"light\"])){--g1:oklch(0.72 0.12 250);--g2:oklch(0.76 0.13 60);--g3:oklch(0.72 0.13 330)}}\n:host-context([data-theme=\"dark\"]){--g1:oklch(0.72 0.12 250);--g2:oklch(0.76 0.13 60);--g3:oklch(0.72 0.13 330)}\n[hidden]{display:none!important}\n*{box-sizing:border-box}\n:host{display:block;color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.45}\nbutton,input,select{font:inherit;color:inherit}\nbutton{cursor:pointer}\n:focus-visible{outline:2px solid var(--acc);outline-offset:2px}\n.wrap{max-width:1180px;margin:0 auto;display:flex;flex-direction:column;gap:18px}\nheader{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}\nheader h1{margin:0;font-size:22px;letter-spacing:-.02em}\nheader h1 small{font-family:var(--mono);font-weight:400;font-size:11px;color:var(--faint);margin-left:8px;letter-spacing:.04em}\nheader p{margin:0;color:var(--muted);font-size:13.5px;max-width:62ch}\n.cols{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:18px;align-items:start}\n@media (max-width:860px){.cols{grid-template-columns:1fr}}\n.panel{background:var(--surface);border:1px solid var(--rule);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:14px;min-width:0}\n.lab{font-family:var(--mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}\n.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}\n.seg{display:inline-flex;gap:4px;flex-wrap:wrap}\n.seg button{border:1.5px solid var(--rule);background:transparent;border-radius:999px;padding:5px 13px;font-size:14px}\n.seg button[aria-pressed=\"true\"]{border-color:var(--acc);background:var(--acc-soft)}\n.gtabs{display:flex;gap:6px;flex-wrap:wrap}\n.gtab{border:1.5px solid var(--rule);background:transparent;border-radius:10px;padding:7px 12px;display:flex;gap:8px;align-items:center;font-size:14px}\n.gtab i{width:10px;height:10px;border-radius:50%;background:var(--gc)}\n.gtab small{font-family:var(--mono);font-size:11px;color:var(--faint)}\n.gtab[aria-pressed=\"true\"]{border-color:var(--gc);box-shadow:inset 0 0 0 1px var(--gc)}\n.gedit{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center}\n.gedit input[type=text]{border:1.5px solid var(--rule);border-radius:9px;padding:7px 10px;background:var(--bg);width:100%;min-width:0}\n.num{display:flex;align-items:center;gap:6px}\n.num button{width:32px;height:32px;border-radius:8px;border:0;background:var(--key);font-size:17px}\n.num output{font-family:var(--mono);font-size:17px;min-width:2.2ch;text-align:center;font-variant-numeric:tabular-nums}\n.chips{display:flex;flex-wrap:wrap;gap:6px;min-height:34px;align-content:flex-start}\n.chips .empty{color:var(--faint);font-size:13.5px;padding:6px 0}\n.chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--rule);background:var(--bg);border-radius:999px;padding:3px 4px 3px 10px;font-size:13px;max-width:100%}\n.chip b{font-family:var(--mono);font-weight:500;font-size:11.5px;color:var(--muted)}\n.chip span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}\n.chip button{border:0;background:transparent;border-radius:50%;width:22px;height:22px;color:var(--muted);flex:none}\n.chip button:hover{background:var(--key)}\n.search{display:flex;flex-direction:column;gap:8px}\n.search input{border:1.5px solid var(--rule);border-radius:10px;padding:9px 12px;background:var(--bg);width:100%}\n.results{display:flex;flex-direction:column;max-height:340px;overflow-y:auto;border-top:1px solid var(--rule)}\n.res{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 10px;align-items:center;padding:7px 2px;border-bottom:1px solid var(--rule)}\n.res .nm{font-size:14px;min-width:0}\n.res .nm b{font-family:var(--mono);font-weight:500;font-size:11px;color:var(--faint);margin-right:6px}\n.res .nm small{display:block;font-size:12px;color:var(--faint)}\n.steps{display:flex;gap:3px}\n.steps button{min-width:28px;height:28px;border-radius:7px;border:1.5px solid var(--rule);background:transparent;font-family:var(--mono);font-size:12.5px;padding:0 5px}\n.steps button:hover{border-color:var(--acc)}\n.steps button.on{background:var(--acc-soft);border-color:var(--acc)}\n.steps button.br{color:oklch(0.55 0.11 75)}\n.hint{font-size:12.5px;color:var(--faint);margin:0}\n.ghost{border:1.5px solid var(--rule);background:transparent;border-radius:999px;padding:5px 12px;font-size:13px;color:var(--muted)}\n.ghost:disabled{border-style:dashed;cursor:not-allowed;opacity:.7}\n.field{display:flex;flex-direction:column;gap:6px}\n.slide{display:flex;align-items:center;gap:10px}\n.slide input{flex:1;accent-color:var(--acc);min-width:0}\n.slide output{font-family:var(--mono);font-size:13px;min-width:5ch;text-align:right;font-variant-numeric:tabular-nums}\n.preview{position:relative;width:100%;background:var(--key);border-radius:10px;overflow:hidden;border:1px solid var(--rule)}\n.preview .pc{position:absolute;border:1.5px solid var(--gc);border-radius:3px;background:var(--surface);font:500 10px/1 var(--mono);color:var(--gc);padding:3px}\n.preview .safe{position:absolute;border:1px dashed var(--faint);pointer-events:none}\n.sum{font-family:var(--mono);font-size:12.5px;color:var(--muted)}\n.start{height:54px;border:0;border-radius:13px;background:var(--acc);color:var(--on-acc);font-weight:700;font-size:18px}\n.start:disabled{opacity:.45;cursor:not-allowed}\n.keys{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:13px;color:var(--muted)}\n.keys kbd{font-family:var(--mono);font-size:11.5px;border:1px solid var(--rule);border-bottom-width:2px;border-radius:5px;padding:1px 6px;background:var(--bg);color:var(--ink);justify-self:start}\n\n/* ===== the projected board ===== */\n#board{position:fixed;inset:0;z-index:10;background:var(--b-bg);color:var(--b-ink);overflow:hidden;font-family:var(--sans)}\n#board.dim{--b-bg:#000000; --b-ink:#F4F6F8; --b-line:#3A3F47; --b-mut:#A3AAB5}\n#board.bright{--b-bg:#FFFFFF; --b-ink:#101114; --b-line:#C9CDD4; --b-mut:#5D636E}\n.bbar{position:absolute;left:0;right:0;top:0;height:var(--barh);display:flex;align-items:center;justify-content:space-between;gap:16px;padding:0 1.2vw;font-family:var(--mono);font-size:calc(var(--barh)*.42);color:var(--b-mut);white-space:nowrap;overflow:hidden}\n.bbar .tm{color:var(--b-ink);font-variant-numeric:tabular-nums}\n.bbar .tm.low{color:oklch(0.62 0.18 28)}\n.bbar .prog{position:absolute;left:0;bottom:0;height:3px;background:var(--acc);transition:width 1s linear}\n.bbar button{border:1px solid var(--b-line);background:transparent;color:var(--b-mut);border-radius:6px;padding:2px 9px;font:inherit;font-size:.8em}\n.region{position:absolute;border-top:4px solid var(--gc)}\n.region .rname{position:absolute;left:0;top:-4px;transform:translateY(-100%);font:600 13px/1.6 var(--sans);color:var(--gc);padding:0 6px;background:var(--b-bg)}\n.cell{position:absolute;border:2px solid var(--b-line);border-radius:10px;display:flex;flex-direction:column;overflow:hidden;cursor:pointer}\n.cell .tag{position:absolute;top:.35em;left:.45em;font:700 var(--tagf)/1 var(--mono);color:var(--gc);z-index:1}\n.cell .q>*{flex-shrink:0}\n.cell .q{flex:none;padding:calc(var(--tagf)*1.6) .7em .3em;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:.35em;text-align:center;overflow:hidden;line-height:1.22;font-weight:500}\n.cell .qp{text-wrap:balance;max-width:100%}\n.cell .qv{display:flex;justify-content:center;max-width:100%;min-height:0}\n.cell .qv svg{height:auto;max-width:100%;display:block}\n.cell .qc{display:flex;flex-wrap:wrap;gap:.3em .9em;justify-content:center;max-width:100%}\n.cell .qc .ch{display:inline-flex;align-items:center;gap:.3em}\n.cell .qc .ch b{font-family:var(--mono);font-size:.8em;color:var(--b-mut)}\n.cell .qc .ch svg{height:auto;display:block}\n.cell .qo{text-align:left;display:flex;flex-direction:column;gap:.2em;max-width:100%}\n.cell .qo div{display:flex;gap:.4em}.cell .qo b{font-family:var(--mono);color:var(--b-mut)}\n.cell .ws{flex:1;position:relative;border-top:1.5px dashed var(--b-line);display:flex;flex-direction:column;justify-content:flex-end;gap:.4em;padding:.4em .7em .6em;font-size:var(--wsf);color:var(--b-mut)}\n.cell .ws .bl{display:flex;align-items:baseline;gap:.4em}\n.cell .ws .bl i{flex:1;border-bottom:1.5px solid var(--b-line);height:1em}\n.cell .ans{position:absolute;right:.5em;bottom:.4em;max-width:80%;font-size:var(--ansf);font-weight:600;color:var(--acc);text-align:right;line-height:1.2}\n#board.dim .cell .ans{color:oklch(0.8 0.14 150)}\n.cell.fresh{animation:fresh .5s ease-out}\n@keyframes fresh{from{background:color-mix(in oklch,var(--gc) 14%,transparent)}to{background:transparent}}\n@media (prefers-reduced-motion:reduce){.cell.fresh{animation:none}}\n.cell math,.cell .m{font-family:var(--math);font-size:1.06em}\n.fr{display:inline-flex;flex-direction:column;align-items:center;line-height:1;vertical-align:middle;font-size:.82em;margin:0 .08em}\n.fr sup{border-bottom:1.5px solid currentColor;padding:0 .15em;font-size:1em;vertical-align:baseline}\n.fr sub{padding:0 .15em;font-size:1em;vertical-align:baseline}\ntable.dt{border-collapse:collapse;margin:.2em auto;font-variant-numeric:tabular-nums}\ntable.dt th,table.dt td{border:1px solid var(--b-line);padding:.1em .5em;text-align:center}\n.cell .lvl{position:absolute;top:.35em;right:.5em;font:500 var(--tagf)/1 var(--mono);color:var(--b-mut);opacity:.7;z-index:1}\n.tools{position:absolute;top:.25em;right:.25em;display:flex;gap:4px;z-index:2;opacity:0;transition:opacity .15s}\n.cell:hover .tools,.region:hover .tools,.tools:focus-within{opacity:1}\n.tools button{font:600 13px/1 var(--sans);border:1px solid var(--b-line);background:var(--b-bg);color:var(--b-ink);border-radius:7px;padding:5px 8px;cursor:pointer}\n.tools button:hover{border-color:var(--gc,var(--acc))}\n.region{z-index:3}\n.region .tools{top:-4px;right:0;left:auto;transform:translateY(-100%)}\n.toast{position:absolute;left:50%;bottom:2vh;transform:translateX(-50%);font:500 15px/1.3 var(--sans);background:var(--b-ink);color:var(--b-bg);padding:8px 14px;border-radius:999px;opacity:0;transition:opacity .25s;pointer-events:none;white-space:nowrap}\n.toast.on{opacity:.92}\n.timeup{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;font:700 12vh/1 var(--sans);color:oklch(0.62 0.18 28);opacity:0;transition:opacity .3s}\n.timeup.on{opacity:.9}\n.loading{padding:40px 0;color:var(--muted);text-align:center}\n" + '</style>' + "<div class=\"wrap\" id=\"setup\">\n  <header>\n    <h1>DJ mode<small>working name \u00b7 prototype<\/small><\/h1>\n    <p>Put a grid of Mathera questions on the projector. Students write their answers on the whiteboard; you or the class judge them. Nothing here checks answers or touches anyone's tree.<\/p>\n  <\/header>\n  <div class=\"loading\" id=\"loading\">Loading 1,218 skills from Eras I\u2013VII\u2026<\/div>\n  <div class=\"cols\" id=\"cols\" hidden>\n    <div class=\"panel\">\n      <div class=\"row\" style=\"justify-content:space-between\">\n        <span class=\"lab\">Groups on the board<\/span>\n        <div class=\"seg\" id=\"gcount\" role=\"group\" aria-label=\"Number of groups\"><\/div>\n      <\/div>\n      <div class=\"gtabs\" id=\"gtabs\"><\/div>\n      <div class=\"gedit\">\n        <input type=\"text\" id=\"gname\" aria-label=\"Group name\" maxlength=\"24\">\n        <div class=\"num\"><span class=\"lab\" style=\"margin-right:4px\">Areas<\/span><button id=\"aMinus\" aria-label=\"Fewer areas\">\u2212<\/button><output id=\"aN\"><\/output><button id=\"aPlus\" aria-label=\"More areas\">+<\/button><\/div>\n      <\/div>\n      <div class=\"field\">\n        <span class=\"lab\" id=\"plLab\">Playlist<\/span>\n        <div class=\"chips\" id=\"chips\"><\/div>\n      <\/div>\n      <div class=\"row\">\n        <button class=\"ghost\" id=\"sampleBtn\">Load a sample class<\/button>\n        <button class=\"ghost\" id=\"clearBtn\">Clear this playlist<\/button>\n        <button class=\"ghost\" disabled title=\"Needs the main app\">From learners' trees<\/button>\n      <\/div>\n      <p class=\"hint\">Later, \"From learners' trees\" would build each group's playlist from levels its students have already planted. In this prototype you pick the levels.<\/p>\n      <div class=\"search\">\n        <span class=\"lab\">Find a topic<\/span>\n        <input type=\"search\" id=\"q\" placeholder=\"Try: times tables, fractions, quadratics, III.4, area\" autocomplete=\"off\">\n        <div class=\"row\" id=\"addAll\" hidden><span class=\"hint\" id=\"addAllN\"><\/span><div class=\"steps\" id=\"addAllSteps\"><\/div><\/div>\n        <div class=\"results\" id=\"results\"><\/div>\n      <\/div>\n    <\/div>\n    <div class=\"panel\">\n      <span class=\"lab\">Clock<\/span>\n      <div class=\"seg\" id=\"roundSeg\" role=\"group\" aria-label=\"Seconds per round\"><\/div>\n      <div class=\"field\" id=\"clockOpts\">\n        <div class=\"row\"><span class=\"hint\" style=\"min-width:12ch\">Warm-up length<\/span><div class=\"slide\" style=\"flex:1\"><input type=\"range\" id=\"mins\" min=\"2\" max=\"30\" step=\"1\" aria-label=\"Minutes\"><output id=\"minsV\"><\/output><\/div><\/div>\n        <div class=\"row\"><span class=\"hint\" style=\"min-width:12ch\">When time is up<\/span><div class=\"seg\" id=\"autoSeg\"><\/div><\/div>\n      <\/div>\n      <span class=\"lab\">Board<\/span>\n      <div class=\"row\"><span class=\"hint\" style=\"min-width:7ch\">Screen<\/span><div class=\"seg\" id=\"aspSeg\"><\/div><\/div>\n      <div class=\"row\"><span class=\"hint\" style=\"min-width:7ch\">Look<\/span><div class=\"seg\" id=\"lookSeg\"><\/div><\/div>\n      <div class=\"field\"><span class=\"hint\">Writing space under each question<\/span><div class=\"slide\"><input type=\"range\" id=\"wsp\" min=\"15\" max=\"70\" step=\"5\" aria-label=\"Writing space\"><output id=\"wspV\"><\/output><\/div><\/div>\n      <div class=\"field\"><span class=\"hint\">Keep clear at the edges (for keystone, frames, the tray)<\/span><div class=\"slide\"><input type=\"range\" id=\"edge\" min=\"0\" max=\"15\" step=\"1\" aria-label=\"Edge margin\"><output id=\"edgeV\"><\/output><\/div><\/div>\n      <div class=\"field\"><span class=\"hint\">Keep clear at the bottom (out of reach or behind the tray)<\/span><div class=\"slide\"><input type=\"range\" id=\"bot\" min=\"0\" max=\"35\" step=\"1\" aria-label=\"Bottom margin\"><output id=\"botV\"><\/output><\/div><\/div>\n      <div class=\"preview\" id=\"preview\" aria-label=\"Board preview\"><\/div>\n      <div class=\"sum\" id=\"sum\"><\/div>\n      <button class=\"start\" id=\"startBtn\">Start on the projector<\/button>\n      <div class=\"keys\">\n        <kbd>\u2192<\/kbd><span>new questions on every square, same levels (\u2190 goes back)<\/span>\n        <kbd>\u2191 \u2193<\/kbd><span>whole board one step harder or easier<\/span>\n        <kbd>click<\/kbd><span>new question in that square, same level<\/span>\n        <kbd>hover<\/kbd><span>a square or group name shows \u2212 \u21bb + for just that part<\/span>\n        <kbd>R<\/kbd><span>start over from the playlists<\/span>\n        <kbd>A<\/kbd><span>show or hide answers, for judging<\/span>\n        <kbd>Space<\/kbd><span>pause the clock, if one is on<\/span>\n        <kbd>F<\/kbd><span>full screen<\/span>\n        <kbd>Esc<\/kbd><span>back to setup<\/span>\n      <\/div>\n    <\/div>\n  <\/div>\n<\/div>\n\n<div id=\"board\" class=\"bright\" hidden>\n  <div class=\"bbar\" id=\"bbar\"><\/div>\n  <div id=\"cells\"><\/div>\n  <div class=\"timeup\" id=\"timeup\">Time<\/div>\n  <div class=\"toast\" id=\"toast\" role=\"status\"><\/div>\n<\/div>\n\n";
-  function open() {
-    document.querySelectorAll('.app section.view').forEach(s => s.hidden = s !== view);
-    document.body.classList.remove('wt', 'gatewide', 'homewide', 'worldwide'); if (window.__frameSwap) window.__frameSwap('dj');
-    document.querySelectorAll('#tabs button').forEach(b => b.setAttribute('aria-current', b === tab ? 'page' : 'false'));
-    document.body.classList.remove('focus'); document.body.classList.add('djwide');
-    window.scrollTo(0, 0);
-    if (!booted) { booted = true; DJ_BOOT(ROOT); ROOT.append(Object.assign(document.createElement('style'), { textContent: '.wrap{max-width:none}.cols{grid-template-columns:minmax(0,4fr) minmax(0,8fr);gap:24px}@media (max-width:860px){.cols{grid-template-columns:1fr}}' })); } else ROOT.dispatchEvent(new Event('dj-show'));
-  }
-  tab.addEventListener('click', open);
-  // any other tab: hide the board setup again (the app's own handler shows its view)
-  document.getElementById('tabs').addEventListener('click', e => { if (e.target.closest('button[data-v]')) { view.hidden = true; tab.setAttribute('aria-current', 'false'); document.body.classList.remove('djwide'); } });
-})();
-</script>
