@@ -44274,7 +44274,7 @@ window.__mathera = { celebrate: (...a) => celebrate(...a), force: (id, step, dri
   host.insertAdjacentHTML('beforeend', `
   <section class="view" id="v-sheet" hidden>
     <div class="ch-top"><img id="chPort" alt=""><div><div class="ch-sub">Character sheet</div><h1 id="chName"></h1><p class="ch-sub" id="chDesc"></p>
-      <div class="ch-row" style="margin-top:8px"><button class="ch-btn ghost" id="chSwap">Change character</button><button class="ch-btn ghost" id="chGearBtn">Gear &amp; settings</button></div></div></div>
+      <div class="ch-row" style="margin-top:8px"><button class="ch-btn ghost" id="chSwap">Change character</button><button class="ch-btn ghost" id="chGearBtn">Character &amp; settings</button></div></div></div>
     <h2 class="ch-h2">Gear: one piece per core skill</h2><div class="ch-gear" id="chGear"></div>
     <p class="ch-sub" style="font-size:.85rem">Locked until a skill is proven. Green: proven. Gold: proven on Hard (both brave steps).</p>
     <h2 class="ch-h2">Your CHAR code</h2><div class="ch-code" id="chCode"></div>
@@ -44313,7 +44313,7 @@ window.__mathera = { celebrate: (...a) => celebrate(...a), force: (id, step, dri
   // entry points from ID card and the settings view; rename the tab to Gear
   $('v-id').querySelector('.idcard').insertAdjacentHTML('afterbegin', '<div class="ch-row" style="justify-content:flex-end"><button class="pill" id="chFromId">Character sheet</button></div>');
   $('chFromId').onclick = () => show('sheet');
-  const rt = document.querySelector('#tabs button[data-v="rules"]'); if (rt) rt.textContent = 'Gear';
+  const rt = document.querySelector('#tabs button[data-v="rules"]'); if (rt) { rt.textContent = 'Character'; const w = document.querySelector('#tabs button[data-v="gate"]'); if (w) w.after(rt); }
   /* ---- frame layouts: ID card 4+8, Gear 6+6, title rows ---- */
   const title = (sec, t) => $(sec).insertAdjacentHTML('afterbegin', `<h2 class="ftitle">${t}</h2>`);
   { const idc = $('v-id').querySelector('.idcard'), L = document.createElement('div'), R = document.createElement('div');
@@ -44329,7 +44329,7 @@ window.__mathera = { celebrate: (...a) => celebrate(...a), force: (id, step, dri
     L.className = 'fcol6'; R.className = 'fcol6';
     [...rl.children].forEach(r => (r.querySelector && r.querySelector('#rPal,#rSpecial,#acornBox,#graftIn,#ringList,#specIn') ? R : L).appendChild(r));
     rl.append(L, R); rl.classList.add('fgrid'); }
-  title('v-id', 'ID card'); title('v-rules', 'Gear'); title('v-sheet', 'Character sheet');
+  title('v-id', 'ID card'); title('v-rules', 'Character'); title('v-sheet', 'Character sheet');
   idPortrait();
   window.__char = { encode, decode, restore, gear, show: v => show(v), view: () => view };
 })();
