@@ -773,6 +773,11 @@ body.wt .fcard{background:#111317;border-color:rgba(255,255,255,.12)}
 .eras button[data-soon="VI"]::before{background-image:url("worlds/era6.jpg")}
 .eras button[data-soon="VII"]::before{background-image:url("worlds/era7.jpg")}
 .eras button.soon,.gp.later{cursor:default}
+/* Small era tiles: simple pixel-world icons, no paintings (paintings only on the gate and the World Tree view) */
+.eras button::before,body.wt .eras button::before{content:none!important;background-image:none!important}
+.eras button svg{display:block;margin:0 auto 3px;color:var(--ink);opacity:.85}
+body.wt .eras button svg{color:#F4F2EC;opacity:.95}
+.eras button[aria-pressed="true"] svg{opacity:1}
 .eras button.soon::before,.eras button.soon:hover::before{filter:grayscale(1) brightness(.38)!important}
 .eras button.soon b{opacity:.7}
 .soon-band{position:absolute;left:0;right:0;top:var(--soon-top,50%);transform:translateY(-50%);z-index:2;
@@ -45676,8 +45681,8 @@ $('tabs').addEventListener('click', e => { const b = e.target.closest('button[da
 
 /* ---- era switcher ---- */
 function renderEraTabs(el) {
-  $(el).innerHTML = ERA_KEYS.map(k => { const c = MM.counts(PS[k], now()); return `<button data-era="${k}" aria-pressed="${k === era}"><b>Era ${k}</b> ${ERAS[k].name}${META.placed[k] ? `<small>${c.proven + c.thirsty}/${PS[k].order.length}</small>` : ERAS[k].total ? `<small>${ERAS[k].units.length < ERAS[k].total ? `preview · ${ERAS[k].units.length}/${ERAS[k].total} units` : `new · ${PS[k].order.length} skills`}</small>` : ''}</button>`; }).join('')
-    + WORLD_KEYS.filter(k => !ERAS[k]).map(k => `<button type="button" class="soon" data-soon="${k}" aria-disabled="true" title="Era ${k} · ${GATE_WORD[k]}: coming soon"><span class="soon-band" data-short="Soon">Coming soon</span><b>Era ${k}</b> ${GATE_WORD[k]}</button>`).join('');
+  $(el).innerHTML = ERA_KEYS.map(k => { const c = MM.counts(PS[k], now()); return `<button data-era="${k}" aria-pressed="${k === era}">${worldSVG(k, 24)}<b>Era ${k}</b> ${ERAS[k].name}${META.placed[k] ? `<small>${c.proven + c.thirsty}/${PS[k].order.length}</small>` : ERAS[k].total ? `<small>${ERAS[k].units.length < ERAS[k].total ? `preview · ${ERAS[k].units.length}/${ERAS[k].total} units` : `new · ${PS[k].order.length} skills`}</small>` : ''}</button>`; }).join('')
+    + WORLD_KEYS.filter(k => !ERAS[k]).map(k => `<button type="button" class="soon" data-soon="${k}" aria-disabled="true" title="Era ${k} · ${GATE_WORD[k]}: coming soon"><span class="soon-band" data-short="Soon">Coming soon</span>${worldSVG(k, 24)}<b>Era ${k}</b> ${GATE_WORD[k]}</button>`).join('');
 }
 function switchEra(k) { if (k === era) return; setEra(k); S = MM.session(); save(); show(META.placed[k] ? 'home' : 'welcome'); }
 ['eraTabs', 'welTabs'].forEach(id => $(id).addEventListener('click', e => { const b = e.target.closest('button[data-era]'); if (b) switchEra(b.dataset.era); }));
@@ -47327,7 +47332,7 @@ applyPalette();
 let bvEra = null, bvFrom = 'gate';
 function renderBasic() {
   const D = MATHERA_DATA, k = bvEra || era, t = now();
-  $('bvEras').innerHTML = ERA_KEYS.map(x => `<button data-bera="${x}" aria-pressed="${x === k}"><b>Era ${x}</b> ${esc(ERAS[x].name)}</button>`).join('');
+  $('bvEras').innerHTML = ERA_KEYS.map(x => `<button data-bera="${x}" aria-pressed="${x === k}">${worldSVG(x, 24)}<b>Era ${x}</b> ${esc(ERAS[x].name)}</button>`).join('');
   const ids = Object.keys(D.skills).filter(id => eraOf(id) === k);
   const rootOrder = D.roots.map(r => r[1]), byRoot = {};
   for (const id of ids) { const [, , root, th] = D.skills[id]; ((byRoot[root || 'Other'] = byRoot[root || 'Other'] || {})[th || '—'] = (byRoot[root || 'Other'][th || '—'] || [])).push(id); }
