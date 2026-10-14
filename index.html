@@ -45596,7 +45596,11 @@ window.__frameSwap = v => frameSwap(v);
 
 let view = 'home';
 const VIEWS = ['loading', 'gate', 'welcome', 'home', 'alarm', 'practice', 'id', 'rules', 'report', 'world', 'basic'];
+let WANT_PICK = false;   // true only when the learner asked to choose a starting unit
 function show(v) {
+  if (v === 'welcome' && !WANT_PICK && !META.placed[era] && ERA_KEYS.some(x => x !== era && META.placed[x])) {
+    META.placed[era] = true; META.start[era] = UNITS[0][0]; selUnit = UNITS[0][0]; save(); v = 'home';   // a new era starts at its beginning; House Rules can move it
+  }
   frameSwap(v);
   { const gs = document.querySelector('.top .gsearch'); if (gs) gs.hidden = v !== 'gate'; }
   if (v !== 'report') RSRC = null;
@@ -45609,7 +45613,7 @@ $('tabs').addEventListener('click', e => { const b = e.target.closest('button[da
 
 /* ---- era switcher ---- */
 function renderEraTabs(el) {
-  $(el).innerHTML = ERA_KEYS.map(k => { const c = MM.counts(PS[k], now()); return `<button data-era="${k}" aria-pressed="${k === era}">${worldSVG(k, 24)}<b>Era ${k}</b> ${ERAS[k].name}${META.placed[k] ? `<small>${c.proven + c.thirsty}/${PS[k].order.length}</small>` : ERAS[k].total ? `<small>${ERAS[k].units.length < ERAS[k].total ? `preview · ${ERAS[k].units.length}/${ERAS[k].total} units` : `new · ${PS[k].order.length} skills`}</small>` : ''}</button>`; }).join('')
+  $(el).innerHTML = ERA_KEYS.map(k => { const c = MM.counts(PS[k], now()); return `<button data-era="${k}" aria-pressed="${k === era}">${worldSVG(k, 24)}<b>Era ${k}</b> ${ERAS[k].name}<small>${c.proven + c.thirsty}/${PS[k].order.length}</small></button>`; }).join('')
     + WORLD_KEYS.filter(k => !ERAS[k]).map(k => `<button type="button" class="soon" data-soon="${k}" aria-disabled="true" title="Era ${k} · ${GATE_WORD[k]}: coming soon"><span class="soon-band" data-short="Soon">Coming soon</span>${worldSVG(k, 24)}<b>Era ${k}</b> ${GATE_WORD[k]}</button>`).join('');
 }
 function switchEra(k) { if (k === era) return; setEra(k); S = MM.session(); save(); show(META.placed[k] ? 'home' : 'welcome'); }
@@ -46070,7 +46074,7 @@ $('rDial').addEventListener('input', e => { SET.dial = +e.target.value; $('rDial
 $('rDial').addEventListener('change', saveRules);
 $('rHero').addEventListener('change', e => { RULES.hero = e.target.value; saveRules(); });
 $('rNem').addEventListener('change', e => { RULES.nemesis = e.target.value; saveRules(); });
-$('replaceBtn').addEventListener('click', () => show('welcome'));
+$('replaceBtn').addEventListener('click', () => { WANT_PICK = true; show('welcome'); WANT_PICK = false; });
 let armed = false;
 $('resetBtn').addEventListener('click', () => {
   if (!armed) { armed = true; $('resetBtn').classList.add('arm'); $('resetBtn').textContent = 'Tap again to erase your progress'; setTimeout(() => { armed = false; $('resetBtn').classList.remove('arm'); $('resetBtn').textContent = `Reset my ${eraLabel(era)} progress`; }, 4000); return; }
@@ -46078,7 +46082,7 @@ $('resetBtn').addEventListener('click', () => {
   P.skills = {}; P.steps = {}; delete META.start[era]; META.placed[era] = false; S = MM.session(); armed = false;
   UNITS.forEach(([u]) => markDirty(u));
   $('resetBtn').classList.remove('arm'); $('resetBtn').textContent = 'Progress reset';
-  show('welcome');
+  WANT_PICK = true; show('welcome'); WANT_PICK = false;
 });
 
 /* ================= sound: tiny synthesised effects (House Rules → Sounds: off / rewards only / all) ================= */
