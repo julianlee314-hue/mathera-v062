@@ -696,6 +696,58 @@ body.wt .world .seeworld{color:#E6F58C}
 body.focus .evline,body.djwide .evline{display:none}
 .evline{margin-bottom:16px}
 .pal .sw b{position:absolute;left:5px;top:8px;width:14px;height:3px;border-radius:2px;box-shadow:0 6px 0 currentColor;background:currentColor}
+/* ===== Mathera frame (Don's unified frame, approved by Julius): one card, many contents ===== */
+:root{--frame-max:1388px;--frame-gutter:26px;--frame-h:max(calc(100svh - 220px),560px);--card-radius:16px;--card-pad:32px;--page-bg:#0C0D10}
+html,body{background:var(--page-bg)}
+body{padding-inline:0;margin:0}
+.app,body.focus .app,body.djwide .app,body.worldwide .app,body.gatewide .app,body.wt.homewide .app{max-width:none}
+.top{width:min(100% - 2*var(--frame-gutter),var(--frame-max));margin-inline:auto;--bg:#0C0D10;--surface:rgba(24,26,31,.74);--ink:#F1EFE8;--muted:#B9B6AD;--faint:#8D8A82;--rule:rgba(255,255,255,.13);--key:rgba(255,255,255,.08);--keyp:rgba(255,255,255,.14);--paper:#15171B;--paper-rule:rgba(255,255,255,.1);--qpaper:#FBFBF8;--acc:#DDEB86;--acc-soft:rgba(221,235,134,.15);--on-acc:#15170D;--bad:oklch(0.72 0.14 25);--bad-soft:rgba(220,90,70,.2);--thirst:#F2B458;--thirst-soft:rgba(242,180,88,.18);--wilt:#C08A62;--bark:#C08A62;color-scheme:dark;color:var(--ink)}
+.gate,#v-loading,.evline{width:min(100% - 2*var(--frame-gutter),var(--frame-max));margin-inline:auto}
+.gpanels{height:var(--frame-h);border-radius:var(--card-radius)}
+.fcard{position:relative;width:min(100% - 2*var(--frame-gutter),var(--frame-max));margin-inline:auto;height:var(--frame-h);border-radius:var(--card-radius);border:1px solid #E4E1D8;box-shadow:0 1px 0 #ffffff10 inset,0 24px 60px -24px #000000aa;background:var(--bg);color:var(--ink);overflow:hidden}
+html:not([data-palette]) body:not(.wt) .fcard{--bg:#FBFAF6;--surface:#FFFFFF;--ink:#15171C;--muted:#646A75;--faint:#9AA0AA;--rule:#E8E5DC;--key:#F1EFE8;--keyp:#E8E5DC;--paper:#FFFFFF;--paper-rule:#ECEAE2;--qpaper:#FFFFFF;--acc:#1F7A4D;--acc-soft:#E3F1E8;--on-acc:#FFFFFF;color-scheme:light}
+body.wt .fcard{background:#111317;border-color:rgba(255,255,255,.12)}
+.fcard>.view{position:absolute;inset:0;overflow:auto;padding:var(--card-pad);overscroll-behavior:contain}
+.fcard>.view.swap-in{animation:fswap 180ms ease-out}
+@keyframes fswap{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes ffade{from{opacity:0}to{opacity:1}}
+@media (prefers-reduced-motion:reduce){.fcard>.view.swap-in{animation:ffade 180ms linear}}
+.ftitle{font-family:var(--math);font-weight:600;font-size:28px;line-height:1.15;margin:0;letter-spacing:-.01em}
+.fgrid{display:grid!important;grid-template-columns:repeat(12,minmax(0,1fr));gap:24px;align-items:start}
+.fcol4{grid-column:span 4;display:flex;flex-direction:column;gap:16px;min-width:0}
+.fcol8{grid-column:span 8;display:flex;flex-direction:column;gap:16px;min-width:0}
+.fcol6{grid-column:span 6;display:flex;flex-direction:column;gap:18px;min-width:0}
+#v-id .idcard{background:transparent;border:0;padding:0;border-radius:0}
+.idport{width:100%;aspect-ratio:1;object-fit:cover;border-radius:12px;border:2px solid #E2A13B;display:block}
+.idcls b{display:block;font-family:var(--math);font-size:24px;font-weight:600;line-height:1.2}
+.idcls small{font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:#8A5A00}
+.flab{font-family:var(--mono);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0;font-weight:500}
+@media (max-width:760px){
+  .top,.gate,#v-loading,.evline,.fcard{width:calc(100% - 16px)}
+  .gpanels{height:auto}
+  .fcard{height:auto;overflow:visible}
+  .fcard>.view{position:static;padding:20px 16px}
+  .fgrid{grid-template-columns:minmax(0,1fr)}
+  .fcol4,.fcol8,.fcol6{grid-column:1/-1}
+}
+</style>
+<link rel="stylesheet" href="char/char.css">
+<style>
+/* character picker inside the Gear card */
+.chpick{display:flex;flex-direction:column;gap:12px}
+.chpick .ch-sub{color:var(--muted)}
+.chpick .ch-cards{grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
+.chpick .ch-card{position:relative;background:var(--surface);border:1px solid var(--rule);color:var(--ink);box-shadow:none;padding-bottom:16px}
+.chpick .ch-card img{aspect-ratio:5/4!important}
+.chpick .ch-card b{color:#1B2A4A;font-family:var(--math);letter-spacing:.06em;font-size:1.2rem;padding:14px 16px 2px}
+.chpick .ch-card i{display:block;padding:0 16px 6px;font-style:normal;font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:#8A5A00;text-transform:uppercase}
+.chpick .ch-card span{color:var(--ink);padding:0 16px}
+.chpick .ch-card:hover{border-color:#E2A13B;box-shadow:none}
+.chpick .ch-card[aria-pressed=true]{border-color:#E2A13B;box-shadow:0 0 0 2px #E2A13B,0 14px 30px -18px rgba(0,0,0,.5)}
+.ch-chosen{display:none;position:absolute;top:10px;right:10px;background:#E2A13B;color:#1B1405;font-style:normal;font-size:12px;font-weight:600;padding:2px 10px;border-radius:999px}
+.ch-card[aria-pressed=true] .ch-chosen{display:block}
+.fcard>#v-sheet{border-radius:0;padding:var(--card-pad)}
+@media (max-width:760px){.chpick .ch-cards{grid-template-columns:1fr}}
 </style>
 <script>try{var __p=localStorage.getItem("mathera-palette");if(__p&&__p!=="garden")document.documentElement.setAttribute("data-palette",__p)}catch(e){}</script>
 
@@ -727,6 +779,7 @@ body.focus .evline,body.djwide .evline{display:none}
     <div class="gpanels" id="gPanels"></div>
   </section>
 
+  <div class="frame fcard" id="fcard" hidden>
   <!-- WELCOME / PLACEMENT -->
   <section class="view welcome" id="v-welcome" hidden>
     <div class="eras" id="welTabs" role="group" aria-label="Era"></div>
@@ -891,6 +944,7 @@ body.focus .evline,body.djwide .evline{display:none}
       <div class="saved" id="savedRules"></div>
     </div>
   </section>
+  </div><!-- /fcard -->
 </div>
 <script>
 
@@ -42468,9 +42522,20 @@ function setSaved(t) { ['savedHome', 'savedRules'].forEach(i => { const el = $(i
 function teleSave() {}            // step counters stay on this device only; nothing is sent
 
 /* ================= views ================= */
+/* ---- the frame: one card, many contents ---- */
+function frameSwap(v) {
+  const fc = $('fcard'); if (!fc) return;
+  fc.hidden = v === 'gate' || v === 'loading';
+  const gs = document.querySelector('.top .gsearch'); if (gs) gs.hidden = v !== 'gate';
+  const el = $('v-' + v); if (!el || fc.hidden) return;
+  el.classList.remove('swap-in'); void el.offsetWidth; el.classList.add('swap-in'); el.scrollTop = 0;
+}
+window.__frameSwap = v => frameSwap(v);
+
 let view = 'home';
 const VIEWS = ['loading', 'gate', 'welcome', 'home', 'alarm', 'practice', 'id', 'rules', 'report', 'world'];
 function show(v) {
+  frameSwap(v);
   { const gs = document.querySelector('.top .gsearch'); if (gs) gs.hidden = v !== 'gate'; }
   if (v !== 'report') RSRC = null;
   view = v; VIEWS.forEach(x => $('v-' + x).hidden = x !== v); document.body.classList.toggle('focus', v === 'practice'); document.body.classList.toggle('worldwide', v === 'world'); document.body.classList.toggle('gatewide', v === 'gate'); document.body.classList.toggle('wt', v === 'gate' || v === 'welcome' || v === 'home' || v === 'world'); document.body.classList.toggle('homewide', v === 'home' || v === 'welcome'); wtBg(v);
@@ -44127,6 +44192,147 @@ async function boot() {}           // no accounts, no remote sync: everything st
 
 applyPalette();
 window.__mathera = { celebrate: (...a) => celebrate(...a), force: (id, step, drill) => { FORCE = { id, step, mode: 'practice', drill: !!drill }; newQ(); }, dq: () => DQ, P: () => P, PS, setEra: k => { setEra(k); show(META.placed[k] ? 'home' : 'welcome'); }, era: () => era, S: () => S, MM, clock, cur: () => cur, q: () => q, show, renderHome, acorn: () => myAcorn(), graft: (code, rules) => graft(Acorn.decode(code), rules), makeReport };
+/* ==== v0.6.2c character trial add-on (was char/char.js) ==== */
+/* Mathera v0.6.2c, character trial. Add-on: character select, sheet, CHAR code. Device-only (localStorage), no network. */
+(function () {
+  const CKEY = 'mathera-char';
+  const CLASSES = [
+    ['owl', 'Owl', 'WORDS', 'Reads the story first, then finds all the maths hiding in it.'],
+    ['tortoise', 'Tortoise', 'CLASSIC', 'Steady technique: clean steps, straight questions, no tricks.'],
+    ['fox', 'Fox', 'PUZZLES', 'Loves a riddle: spots the patterns, twists and clever shortcuts.']];
+  const CORE = [ // name, unit-name regex, gear per class (GEAR_MAP.md, Don)
+    ['Number sense & place value', /count|compar|place value|rounding/i, ['Talon boots', 'Greaves', 'Soft boots']],
+    ['Times tables', /multipl|division|times|factors/i, ['Feather-tip gauntlets', 'Heavy gauntlets', 'Light bracers'], 1],
+    ['Mental arithmetic', /addition|subtraction|mental|estimat/i, ['Circlet', 'Helm', 'Circlet']],
+    ['Fractions', /fraction/i, ['Segment shield', 'Big segment shield', 'Small buckler'], 1],
+    ['Decimals & percentages', /decimal|percent/i, ['Belt with tenths notches', 'Belt', 'Bandolier']],
+    ['Ratio & proportion', /ratio|rate|proportion/i, ['Balance-scale pauldrons', 'Balance-scale pauldrons', 'Balance-scale pauldrons']],
+    ['Negative numbers', /integer|negative/i, ['Two-sided cloak', 'Two-sided cloak', 'Two-sided cloak']],
+    ['Order of operations', /expression|order of op|exponent/i, ['Scroll case', 'Scroll case', 'Scroll case']],
+    ['Equations & algebra', /equation|inequal|system|polynom|quadratic/i, ['Star wand', 'Sword', 'Puzzle-cube staff'], 1],
+    ['Functions & graphs', /function|graph|linear/i, ['Banner with a curve', 'Banner with a curve', 'Banner with a curve']]];
+  const A = '0123456789ABCDEFGHJKMNPQRSTVWXYZ'; // Crockford Base32
+  const L = { pace: ['gentle', 'steady', 'intense'], coins: ['US', 'THB'], units: ['metric', 'imperial'], clock: ['12h', '24h'], onoff: ['on', 'off'], sound: ['off', 'rewards', 'all'], cele: ['big', 'small', 'off'] };
+  const PAL = (typeof PALETTES !== 'undefined' ? PALETTES.map(p => p[0]) : ['garden']).slice(0, 16);
+  const ix = (arr, v) => Math.max(0, arr.indexOf(v));
+  let C = {}; try { C = JSON.parse(localStorage.getItem(CKEY) || '{}') || {}; } catch (e) {}
+  const saveC = () => { try { localStorage.setItem(CKEY, JSON.stringify(C)); } catch (e) {} };
+  const cls = () => CLASSES.findIndex(c => c[0] === C.cls);
+
+  /* gear from local progress: green = a mapped skill proven (step d), gold = proven with both Hard (brave e+f) steps */
+  function gear() {
+    return CORE.map(([, re]) => {
+      let proven = 0, gold = 0;
+      for (const k of ERA_KEYS) { const P = PS[k]; for (const [u, name] of ERAS[k].units) { if (!re.test(name)) continue;
+        for (const s of ERAS[k].E.skills) { if (MM.unitOf(s.id) !== u || !MM.proven(P, s.id)) continue; proven++; const b = MM.braveEarned(P, s.id); if (b.e && b.f) gold++; } } }
+      const r = (C.restored || {});
+      return { proven, gold, st: Math.max(gold ? 2 : proven ? 1 : 0, 0) };
+    }).map((g, i) => { const r = (C.restored || [])[i]; if (r) { g.st = Math.max(g.st, r.st); g.proven = Math.max(g.proven, r.rank); g.gold = Math.max(g.gold, r.gold); } return g; });
+  }
+
+  /* ---- CHAR code: 164-bit payload + CRC-16 = 180 bits = 36 chars ---- */
+  function crc16(bits) { let c = 0xFFFF; for (const b of bits) { const top = (c >> 15) & 1; c = (c << 1) & 0xFFFF; if (top ^ b) c ^= 0x1021; } return c; }
+  function encode() {
+    const bits = [], put = (v, n) => { for (let i = n - 1; i >= 0; i--) bits.push((v >> i) & 1); };
+    put(1, 4); put(Math.max(0, cls()), 2); put(ix(L.pace, SET.pace), 2); put(Math.min(15, SET.dial | 0), 4); put(SET.brave ? 1 : 0, 1);
+    put(ix(HEROES.map(h => h[0]), RULES.hero) & 7, 3); put(ix(NEMESES.map(h => h[0]), RULES.nemesis) & 15, 4);
+    put(ix(L.coins, RULES.coins), 1); put(ix(L.units, RULES.units), 1); put(ix(L.clock, RULES.clock), 1); put(ix(L.onoff, RULES.stories), 1); put(ix(L.onoff, RULES.drill || 'on'), 1); put(ix(L.onoff, RULES.specials || 'on'), 1);
+    put(ix(L.sound, RULES.sound || 'rewards'), 2); put(ix(L.cele, RULES.celebrate || 'big'), 2); put(ix(PAL, RULES.palette || 'garden') & 15, 4); put(ix(ERA_KEYS, era) & 7, 3);
+    const g = gear(); g.forEach(x => put(x.st, 2)); g.forEach(x => put(Math.min(15, x.proven), 4)); g.forEach(x => put(Math.min(15, x.gold), 4));
+    put(Math.floor(Date.now() / 864e5) & 0x3FFF, 14);
+    while (bits.length < 164) bits.push(0);
+    put(crc16(bits), 16);
+    let s = ''; for (let i = 0; i < 180; i += 5) s += A[parseInt(bits.slice(i, i + 5).join(''), 2)];
+    return s.match(/.{4}/g).join('-');
+  }
+  function decode(str) {
+    const clean = str.toUpperCase().replace(/[\s-]/g, '').replace(/O/g, '0').replace(/[IL]/g, '1');
+    if (clean.length !== 36) throw new Error('A CHAR code has 36 letters and digits.');
+    const bits = []; for (const ch of clean) { const v = A.indexOf(ch); if (v < 0) throw new Error(`“${ch}” isn't in the code alphabet.`); for (let i = 4; i >= 0; i--) bits.push((v >> i) & 1); }
+    let p = 0; const get = n => { let v = 0; for (let i = 0; i < n; i++) v = v * 2 + bits[p++]; return v; };
+    const body = bits.slice(0, 164), crc = parseInt(bits.slice(164).join(''), 2);
+    if (crc16(body) !== crc) throw new Error('That code has a typo somewhere (checksum mismatch).');
+    if (get(4) !== 1) throw new Error('Unknown code version.');
+    const o = { cls: get(2), pace: get(2), dial: get(4), brave: get(1), hero: get(3), nem: get(4), coins: get(1), units: get(1), clock: get(1), stories: get(1), drill: get(1), specials: get(1), sound: get(2), cele: get(2), pal: get(4), era: get(3) };
+    o.st = CORE.map(() => get(2)); o.rank = CORE.map(() => get(4)); o.gold = CORE.map(() => get(4)); o.day = get(14);
+    return o;
+  }
+  function restore(str) {
+    const o = decode(str);
+    C.cls = (CLASSES[o.cls] || CLASSES[0])[0];
+    SET.pace = L.pace[o.pace] || SET.pace; SET.dial = o.dial || SET.dial; SET.brave = !!o.brave;
+    RULES.hero = (HEROES[o.hero] || HEROES[0])[0]; RULES.nemesis = (NEMESES[o.nem] || NEMESES[0])[0];
+    RULES.coins = L.coins[o.coins]; RULES.units = L.units[o.units]; RULES.clock = L.clock[o.clock]; RULES.stories = L.onoff[o.stories]; RULES.drill = L.onoff[o.drill]; RULES.specials = L.onoff[o.specials];
+    RULES.sound = L.sound[o.sound] || 'rewards'; RULES.celebrate = L.cele[o.cele] || 'big'; RULES.palette = PAL[o.pal] || 'garden';
+    C.restored = CORE.map((_, i) => ({ st: o.st[i], rank: o.rank[i], gold: o.gold[i] }));
+    saveC(); save(); if (typeof applyPalette === 'function') applyPalette();
+    const k = ERA_KEYS[o.era]; if (k && k !== era) setEra(k);
+  }
+
+  /* ---- views ---- */
+  const host = $('v-rules').parentNode;
+  host.insertAdjacentHTML('beforeend', `
+  <section class="view" id="v-sheet" hidden>
+    <div class="ch-top"><img id="chPort" alt=""><div><div class="ch-sub">Character sheet</div><h1 id="chName"></h1><p class="ch-sub" id="chDesc"></p>
+      <div class="ch-row" style="margin-top:8px"><button class="ch-btn ghost" id="chSwap">Change character</button><button class="ch-btn ghost" id="chGearBtn">Gear &amp; settings</button></div></div></div>
+    <h2 class="ch-h2">Gear: one piece per core skill</h2><div class="ch-gear" id="chGear"></div>
+    <p class="ch-sub" style="font-size:.85rem">Locked until a skill is proven. Green: proven. Gold: proven on Hard (both brave steps).</p>
+    <h2 class="ch-h2">Your CHAR code</h2><div class="ch-code" id="chCode"></div>
+    <div class="ch-row"><button class="ch-btn" id="chCopy">Copy</button><span class="ch-sub" style="font-size:.85rem">Carries your character, settings and gear. Stays on this device unless you copy it.</span></div>
+    <div class="ch-row"><input id="chIn" placeholder="Restore from code: XXXX-XXXX-…" autocomplete="off" spellcheck="false"><button class="ch-btn ghost" id="chRest">Restore</button></div>
+    <div class="ch-msg" id="chMsg" role="status"></div>
+    <h2 class="ch-h2">Fully geared</h2><img class="ch-geared" id="chGeared" alt="">
+  </section>`);
+  VIEWS.push('sheet');
+  $('v-rules').insertAdjacentHTML('afterbegin', `<div class="chpick" id="chPick"><h3 class="flab">Choose your character</h3><p class="ch-sub">Same skills, same credit. Only the style of question changes, and you can switch any time.</p>
+    <div class="ch-cards" id="chCards">${CLASSES.map(([k, n, m, d]) => `<button class="ch-card" data-c="${k}" aria-pressed="false"><img src="char/${k}.jpg" alt="${n}" width="480" height="480"><b>${m}</b><i>${n}</i><span>${d}</span><em class="ch-chosen">✓ Chosen</em></button>`).join('')}</div></div>`);
+  const markCards = () => $('chCards').querySelectorAll('[data-c]').forEach(b => b.setAttribute('aria-pressed', b.dataset.c === C.cls));
+
+  function renderSheet() {
+    const i = Math.max(0, cls()), [k, n, m, d] = CLASSES[i];
+    $('chPort').src = `char/${k}.jpg`; $('chPort').alt = n; $('chName').textContent = `${n} · ${m}`; $('chDesc').textContent = d;
+    $('chGeared').src = `char/${k}-geared.jpg`; $('chGeared').alt = `${n}, fully geared`;
+    const g = gear();
+    $('chGear').innerHTML = CORE.map(([name, , pieces, star], j) => { const s = ['locked', 'green', 'gold'][g[j].st];
+      return `<div class="ch-g ${s}"><span>${esc(pieces[i])}${star ? ' ★' : ''}<br><small>${esc(name)}</small></span><em>${s}${g[j].proven ? ` · ${g[j].proven}` : ''}</em></div>`; }).join('');
+    $('chCode').textContent = encode();
+  }
+  let pending = null;
+  $('chCards').addEventListener('click', e => { const b = e.target.closest('[data-c]'); if (!b) return; C.cls = b.dataset.c; saveC();
+    markCards(); idPortrait(); if (pending) { const k = pending; pending = null; origGate(k); } });
+  $('chSwap').onclick = () => { show('rules'); $('chPick').scrollIntoView({ block: 'start' }); };
+  $('chGearBtn').onclick = () => show('rules');
+  $('chCopy').onclick = () => { navigator.clipboard && navigator.clipboard.writeText($('chCode').textContent).then(() => $('chMsg').textContent = 'Copied.', () => {}); };
+  $('chRest').onclick = () => { try { restore($('chIn').value); renderSheet(); $('chMsg').textContent = 'Restored. Welcome back.'; } catch (err) { $('chMsg').textContent = err.message; } };
+
+  const origShow = show;
+  show = function (v) { origShow(v); if (v === 'sheet') renderSheet(); if (v === 'rules') markCards(); if (v === 'id') idPortrait(); };
+  const origGate = gateOpen;
+  gateOpen = function (k) { if (ERAS[k] && !C.cls) { pending = k; show('rules'); $('chPick').scrollIntoView({ block: 'start' }); return; } origGate(k); };
+
+  // entry points from ID card and the settings view; rename the tab to Gear
+  $('v-id').querySelector('.idcard').insertAdjacentHTML('afterbegin', '<div class="ch-row" style="justify-content:flex-end"><button class="pill" id="chFromId">Character sheet</button></div>');
+  $('chFromId').onclick = () => show('sheet');
+  const rt = document.querySelector('#tabs button[data-v="rules"]'); if (rt) rt.textContent = 'Gear';
+  /* ---- frame layouts: ID card 4+8, Gear 6+6, title rows ---- */
+  const title = (sec, t) => $(sec).insertAdjacentHTML('afterbegin', `<h2 class="ftitle">${t}</h2>`);
+  { const idc = $('v-id').querySelector('.idcard'), L = document.createElement('div'), R = document.createElement('div');
+    L.className = 'fcol4'; R.className = 'fcol8';
+    const kids = [...idc.children];
+    kids.forEach((k, i) => (i < 2 ? L : R).appendChild(k));
+    L.insertAdjacentHTML('afterbegin', '<img class="idport" id="idPort" alt="" hidden><div class="idcls" id="idCls"></div>');
+    idc.append(L, R); idc.classList.add('fgrid'); }
+  function idPortrait() { const i = cls(), p = $('idPort'), c = $('idCls'); if (!p) return;
+    if (i < 0) { p.hidden = true; c.innerHTML = '<button class="pill" id="idPick">Choose a character</button>'; $('idPick').onclick = () => $('chSwap').onclick(); return; }
+    const [k, n, m] = CLASSES[i]; p.src = `char/${k}.jpg`; p.alt = n; p.hidden = false; c.innerHTML = `<b>${n}</b><small>${m}</small>`; }
+  { const rl = $('v-rules').querySelector('.rules'), L = document.createElement('div'), R = document.createElement('div');
+    L.className = 'fcol6'; R.className = 'fcol6';
+    [...rl.children].forEach(r => (r.querySelector && r.querySelector('#rPal,#rSpecial,#acornBox,#graftIn,#ringList,#specIn') ? R : L).appendChild(r));
+    rl.append(L, R); rl.classList.add('fgrid'); }
+  title('v-id', 'ID card'); title('v-rules', 'Gear'); title('v-sheet', 'Character sheet');
+  idPortrait();
+  window.__char = { encode, decode, restore, gear, show: v => show(v), view: () => view };
+})();
 })();
 
 </script>
@@ -44484,11 +44690,12 @@ else { wire(); renderSetup(); }
   const ROOT = host.attachShadow({ mode: 'open' });
   ROOT.innerHTML = '<style>' + ":host{--g1:oklch(0.55 0.14 250);--g2:oklch(0.6 0.15 55);--g3:oklch(0.55 0.15 330);--b-bg:#FFFFFF;--b-ink:#101114;--b-line:#C9CDD4;--b-mut:#5D636E}\n@media (prefers-color-scheme: dark){:host-context(:root:not([data-theme=\"light\"])){--g1:oklch(0.72 0.12 250);--g2:oklch(0.76 0.13 60);--g3:oklch(0.72 0.13 330)}}\n:host-context([data-theme=\"dark\"]){--g1:oklch(0.72 0.12 250);--g2:oklch(0.76 0.13 60);--g3:oklch(0.72 0.13 330)}\n[hidden]{display:none!important}\n*{box-sizing:border-box}\n:host{display:block;color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.45}\nbutton,input,select{font:inherit;color:inherit}\nbutton{cursor:pointer}\n:focus-visible{outline:2px solid var(--acc);outline-offset:2px}\n.wrap{max-width:1180px;margin:0 auto;display:flex;flex-direction:column;gap:18px}\nheader{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}\nheader h1{margin:0;font-size:22px;letter-spacing:-.02em}\nheader h1 small{font-family:var(--mono);font-weight:400;font-size:11px;color:var(--faint);margin-left:8px;letter-spacing:.04em}\nheader p{margin:0;color:var(--muted);font-size:13.5px;max-width:62ch}\n.cols{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:18px;align-items:start}\n@media (max-width:860px){.cols{grid-template-columns:1fr}}\n.panel{background:var(--surface);border:1px solid var(--rule);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:14px;min-width:0}\n.lab{font-family:var(--mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}\n.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}\n.seg{display:inline-flex;gap:4px;flex-wrap:wrap}\n.seg button{border:1.5px solid var(--rule);background:transparent;border-radius:999px;padding:5px 13px;font-size:14px}\n.seg button[aria-pressed=\"true\"]{border-color:var(--acc);background:var(--acc-soft)}\n.gtabs{display:flex;gap:6px;flex-wrap:wrap}\n.gtab{border:1.5px solid var(--rule);background:transparent;border-radius:10px;padding:7px 12px;display:flex;gap:8px;align-items:center;font-size:14px}\n.gtab i{width:10px;height:10px;border-radius:50%;background:var(--gc)}\n.gtab small{font-family:var(--mono);font-size:11px;color:var(--faint)}\n.gtab[aria-pressed=\"true\"]{border-color:var(--gc);box-shadow:inset 0 0 0 1px var(--gc)}\n.gedit{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center}\n.gedit input[type=text]{border:1.5px solid var(--rule);border-radius:9px;padding:7px 10px;background:var(--bg);width:100%;min-width:0}\n.num{display:flex;align-items:center;gap:6px}\n.num button{width:32px;height:32px;border-radius:8px;border:0;background:var(--key);font-size:17px}\n.num output{font-family:var(--mono);font-size:17px;min-width:2.2ch;text-align:center;font-variant-numeric:tabular-nums}\n.chips{display:flex;flex-wrap:wrap;gap:6px;min-height:34px;align-content:flex-start}\n.chips .empty{color:var(--faint);font-size:13.5px;padding:6px 0}\n.chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--rule);background:var(--bg);border-radius:999px;padding:3px 4px 3px 10px;font-size:13px;max-width:100%}\n.chip b{font-family:var(--mono);font-weight:500;font-size:11.5px;color:var(--muted)}\n.chip span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}\n.chip button{border:0;background:transparent;border-radius:50%;width:22px;height:22px;color:var(--muted);flex:none}\n.chip button:hover{background:var(--key)}\n.search{display:flex;flex-direction:column;gap:8px}\n.search input{border:1.5px solid var(--rule);border-radius:10px;padding:9px 12px;background:var(--bg);width:100%}\n.results{display:flex;flex-direction:column;max-height:340px;overflow-y:auto;border-top:1px solid var(--rule)}\n.res{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 10px;align-items:center;padding:7px 2px;border-bottom:1px solid var(--rule)}\n.res .nm{font-size:14px;min-width:0}\n.res .nm b{font-family:var(--mono);font-weight:500;font-size:11px;color:var(--faint);margin-right:6px}\n.res .nm small{display:block;font-size:12px;color:var(--faint)}\n.steps{display:flex;gap:3px}\n.steps button{min-width:28px;height:28px;border-radius:7px;border:1.5px solid var(--rule);background:transparent;font-family:var(--mono);font-size:12.5px;padding:0 5px}\n.steps button:hover{border-color:var(--acc)}\n.steps button.on{background:var(--acc-soft);border-color:var(--acc)}\n.steps button.br{color:oklch(0.55 0.11 75)}\n.hint{font-size:12.5px;color:var(--faint);margin:0}\n.ghost{border:1.5px solid var(--rule);background:transparent;border-radius:999px;padding:5px 12px;font-size:13px;color:var(--muted)}\n.ghost:disabled{border-style:dashed;cursor:not-allowed;opacity:.7}\n.field{display:flex;flex-direction:column;gap:6px}\n.slide{display:flex;align-items:center;gap:10px}\n.slide input{flex:1;accent-color:var(--acc);min-width:0}\n.slide output{font-family:var(--mono);font-size:13px;min-width:5ch;text-align:right;font-variant-numeric:tabular-nums}\n.preview{position:relative;width:100%;background:var(--key);border-radius:10px;overflow:hidden;border:1px solid var(--rule)}\n.preview .pc{position:absolute;border:1.5px solid var(--gc);border-radius:3px;background:var(--surface);font:500 10px/1 var(--mono);color:var(--gc);padding:3px}\n.preview .safe{position:absolute;border:1px dashed var(--faint);pointer-events:none}\n.sum{font-family:var(--mono);font-size:12.5px;color:var(--muted)}\n.start{height:54px;border:0;border-radius:13px;background:var(--acc);color:var(--on-acc);font-weight:700;font-size:18px}\n.start:disabled{opacity:.45;cursor:not-allowed}\n.keys{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:13px;color:var(--muted)}\n.keys kbd{font-family:var(--mono);font-size:11.5px;border:1px solid var(--rule);border-bottom-width:2px;border-radius:5px;padding:1px 6px;background:var(--bg);color:var(--ink);justify-self:start}\n\n/* ===== the projected board ===== */\n#board{position:fixed;inset:0;z-index:10;background:var(--b-bg);color:var(--b-ink);overflow:hidden;font-family:var(--sans)}\n#board.dim{--b-bg:#000000; --b-ink:#F4F6F8; --b-line:#3A3F47; --b-mut:#A3AAB5}\n#board.bright{--b-bg:#FFFFFF; --b-ink:#101114; --b-line:#C9CDD4; --b-mut:#5D636E}\n.bbar{position:absolute;left:0;right:0;top:0;height:var(--barh);display:flex;align-items:center;justify-content:space-between;gap:16px;padding:0 1.2vw;font-family:var(--mono);font-size:calc(var(--barh)*.42);color:var(--b-mut);white-space:nowrap;overflow:hidden}\n.bbar .tm{color:var(--b-ink);font-variant-numeric:tabular-nums}\n.bbar .tm.low{color:oklch(0.62 0.18 28)}\n.bbar .prog{position:absolute;left:0;bottom:0;height:3px;background:var(--acc);transition:width 1s linear}\n.bbar button{border:1px solid var(--b-line);background:transparent;color:var(--b-mut);border-radius:6px;padding:2px 9px;font:inherit;font-size:.8em}\n.region{position:absolute;border-top:4px solid var(--gc)}\n.region .rname{position:absolute;left:0;top:-4px;transform:translateY(-100%);font:600 13px/1.6 var(--sans);color:var(--gc);padding:0 6px;background:var(--b-bg)}\n.cell{position:absolute;border:2px solid var(--b-line);border-radius:10px;display:flex;flex-direction:column;overflow:hidden;cursor:pointer}\n.cell .tag{position:absolute;top:.35em;left:.45em;font:700 var(--tagf)/1 var(--mono);color:var(--gc);z-index:1}\n.cell .q>*{flex-shrink:0}\n.cell .q{flex:none;padding:calc(var(--tagf)*1.6) .7em .3em;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:.35em;text-align:center;overflow:hidden;line-height:1.22;font-weight:500}\n.cell .qp{text-wrap:balance;max-width:100%}\n.cell .qv{display:flex;justify-content:center;max-width:100%;min-height:0}\n.cell .qv svg{height:auto;max-width:100%;display:block}\n.cell .qc{display:flex;flex-wrap:wrap;gap:.3em .9em;justify-content:center;max-width:100%}\n.cell .qc .ch{display:inline-flex;align-items:center;gap:.3em}\n.cell .qc .ch b{font-family:var(--mono);font-size:.8em;color:var(--b-mut)}\n.cell .qc .ch svg{height:auto;display:block}\n.cell .qo{text-align:left;display:flex;flex-direction:column;gap:.2em;max-width:100%}\n.cell .qo div{display:flex;gap:.4em}.cell .qo b{font-family:var(--mono);color:var(--b-mut)}\n.cell .ws{flex:1;position:relative;border-top:1.5px dashed var(--b-line);display:flex;flex-direction:column;justify-content:flex-end;gap:.4em;padding:.4em .7em .6em;font-size:var(--wsf);color:var(--b-mut)}\n.cell .ws .bl{display:flex;align-items:baseline;gap:.4em}\n.cell .ws .bl i{flex:1;border-bottom:1.5px solid var(--b-line);height:1em}\n.cell .ans{position:absolute;right:.5em;bottom:.4em;max-width:80%;font-size:var(--ansf);font-weight:600;color:var(--acc);text-align:right;line-height:1.2}\n#board.dim .cell .ans{color:oklch(0.8 0.14 150)}\n.cell.fresh{animation:fresh .5s ease-out}\n@keyframes fresh{from{background:color-mix(in oklch,var(--gc) 14%,transparent)}to{background:transparent}}\n@media (prefers-reduced-motion:reduce){.cell.fresh{animation:none}}\n.cell math,.cell .m{font-family:var(--math);font-size:1.06em}\n.fr{display:inline-flex;flex-direction:column;align-items:center;line-height:1;vertical-align:middle;font-size:.82em;margin:0 .08em}\n.fr sup{border-bottom:1.5px solid currentColor;padding:0 .15em;font-size:1em;vertical-align:baseline}\n.fr sub{padding:0 .15em;font-size:1em;vertical-align:baseline}\ntable.dt{border-collapse:collapse;margin:.2em auto;font-variant-numeric:tabular-nums}\ntable.dt th,table.dt td{border:1px solid var(--b-line);padding:.1em .5em;text-align:center}\n.cell .lvl{position:absolute;top:.35em;right:.5em;font:500 var(--tagf)/1 var(--mono);color:var(--b-mut);opacity:.7;z-index:1}\n.tools{position:absolute;top:.25em;right:.25em;display:flex;gap:4px;z-index:2;opacity:0;transition:opacity .15s}\n.cell:hover .tools,.region:hover .tools,.tools:focus-within{opacity:1}\n.tools button{font:600 13px/1 var(--sans);border:1px solid var(--b-line);background:var(--b-bg);color:var(--b-ink);border-radius:7px;padding:5px 8px;cursor:pointer}\n.tools button:hover{border-color:var(--gc,var(--acc))}\n.region{z-index:3}\n.region .tools{top:-4px;right:0;left:auto;transform:translateY(-100%)}\n.toast{position:absolute;left:50%;bottom:2vh;transform:translateX(-50%);font:500 15px/1.3 var(--sans);background:var(--b-ink);color:var(--b-bg);padding:8px 14px;border-radius:999px;opacity:0;transition:opacity .25s;pointer-events:none;white-space:nowrap}\n.toast.on{opacity:.92}\n.timeup{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;font:700 12vh/1 var(--sans);color:oklch(0.62 0.18 28);opacity:0;transition:opacity .3s}\n.timeup.on{opacity:.9}\n.loading{padding:40px 0;color:var(--muted);text-align:center}\n" + '</style>' + "<div class=\"wrap\" id=\"setup\">\n  <header>\n    <h1>DJ mode<small>working name \u00b7 prototype<\/small><\/h1>\n    <p>Put a grid of Mathera questions on the projector. Students write their answers on the whiteboard; you or the class judge them. Nothing here checks answers or touches anyone's tree.<\/p>\n  <\/header>\n  <div class=\"loading\" id=\"loading\">Loading 761 skills from Eras I\u2013V\u2026<\/div>\n  <div class=\"cols\" id=\"cols\" hidden>\n    <div class=\"panel\">\n      <div class=\"row\" style=\"justify-content:space-between\">\n        <span class=\"lab\">Groups on the board<\/span>\n        <div class=\"seg\" id=\"gcount\" role=\"group\" aria-label=\"Number of groups\"><\/div>\n      <\/div>\n      <div class=\"gtabs\" id=\"gtabs\"><\/div>\n      <div class=\"gedit\">\n        <input type=\"text\" id=\"gname\" aria-label=\"Group name\" maxlength=\"24\">\n        <div class=\"num\"><span class=\"lab\" style=\"margin-right:4px\">Areas<\/span><button id=\"aMinus\" aria-label=\"Fewer areas\">\u2212<\/button><output id=\"aN\"><\/output><button id=\"aPlus\" aria-label=\"More areas\">+<\/button><\/div>\n      <\/div>\n      <div class=\"field\">\n        <span class=\"lab\" id=\"plLab\">Playlist<\/span>\n        <div class=\"chips\" id=\"chips\"><\/div>\n      <\/div>\n      <div class=\"row\">\n        <button class=\"ghost\" id=\"sampleBtn\">Load a sample class<\/button>\n        <button class=\"ghost\" id=\"clearBtn\">Clear this playlist<\/button>\n        <button class=\"ghost\" disabled title=\"Needs the main app\">From learners' trees<\/button>\n      <\/div>\n      <p class=\"hint\">Later, \"From learners' trees\" would build each group's playlist from levels its students have already planted. In this prototype you pick the levels.<\/p>\n      <div class=\"search\">\n        <span class=\"lab\">Find a topic<\/span>\n        <input type=\"search\" id=\"q\" placeholder=\"Try: times tables, fractions, quadratics, III.4, area\" autocomplete=\"off\">\n        <div class=\"row\" id=\"addAll\" hidden><span class=\"hint\" id=\"addAllN\"><\/span><div class=\"steps\" id=\"addAllSteps\"><\/div><\/div>\n        <div class=\"results\" id=\"results\"><\/div>\n      <\/div>\n    <\/div>\n    <div class=\"panel\">\n      <span class=\"lab\">Clock<\/span>\n      <div class=\"seg\" id=\"roundSeg\" role=\"group\" aria-label=\"Seconds per round\"><\/div>\n      <div class=\"field\" id=\"clockOpts\">\n        <div class=\"row\"><span class=\"hint\" style=\"min-width:12ch\">Warm-up length<\/span><div class=\"slide\" style=\"flex:1\"><input type=\"range\" id=\"mins\" min=\"2\" max=\"30\" step=\"1\" aria-label=\"Minutes\"><output id=\"minsV\"><\/output><\/div><\/div>\n        <div class=\"row\"><span class=\"hint\" style=\"min-width:12ch\">When time is up<\/span><div class=\"seg\" id=\"autoSeg\"><\/div><\/div>\n      <\/div>\n      <span class=\"lab\">Board<\/span>\n      <div class=\"row\"><span class=\"hint\" style=\"min-width:7ch\">Screen<\/span><div class=\"seg\" id=\"aspSeg\"><\/div><\/div>\n      <div class=\"row\"><span class=\"hint\" style=\"min-width:7ch\">Look<\/span><div class=\"seg\" id=\"lookSeg\"><\/div><\/div>\n      <div class=\"field\"><span class=\"hint\">Writing space under each question<\/span><div class=\"slide\"><input type=\"range\" id=\"wsp\" min=\"15\" max=\"70\" step=\"5\" aria-label=\"Writing space\"><output id=\"wspV\"><\/output><\/div><\/div>\n      <div class=\"field\"><span class=\"hint\">Keep clear at the edges (for keystone, frames, the tray)<\/span><div class=\"slide\"><input type=\"range\" id=\"edge\" min=\"0\" max=\"15\" step=\"1\" aria-label=\"Edge margin\"><output id=\"edgeV\"><\/output><\/div><\/div>\n      <div class=\"field\"><span class=\"hint\">Keep clear at the bottom (out of reach or behind the tray)<\/span><div class=\"slide\"><input type=\"range\" id=\"bot\" min=\"0\" max=\"35\" step=\"1\" aria-label=\"Bottom margin\"><output id=\"botV\"><\/output><\/div><\/div>\n      <div class=\"preview\" id=\"preview\" aria-label=\"Board preview\"><\/div>\n      <div class=\"sum\" id=\"sum\"><\/div>\n      <button class=\"start\" id=\"startBtn\">Start on the projector<\/button>\n      <div class=\"keys\">\n        <kbd>\u2192<\/kbd><span>new questions on every square, same levels (\u2190 goes back)<\/span>\n        <kbd>\u2191 \u2193<\/kbd><span>whole board one step harder or easier<\/span>\n        <kbd>click<\/kbd><span>new question in that square, same level<\/span>\n        <kbd>hover<\/kbd><span>a square or group name shows \u2212 \u21bb + for just that part<\/span>\n        <kbd>R<\/kbd><span>start over from the playlists<\/span>\n        <kbd>A<\/kbd><span>show or hide answers, for judging<\/span>\n        <kbd>Space<\/kbd><span>pause the clock, if one is on<\/span>\n        <kbd>F<\/kbd><span>full screen<\/span>\n        <kbd>Esc<\/kbd><span>back to setup<\/span>\n      <\/div>\n    <\/div>\n  <\/div>\n<\/div>\n\n<div id=\"board\" class=\"bright\" hidden>\n  <div class=\"bbar\" id=\"bbar\"><\/div>\n  <div id=\"cells\"><\/div>\n  <div class=\"timeup\" id=\"timeup\">Time<\/div>\n  <div class=\"toast\" id=\"toast\" role=\"status\"><\/div>\n<\/div>\n\n";
   function open() {
-    document.querySelectorAll('.app > section.view').forEach(s => s.hidden = s !== view);
+    document.querySelectorAll('.app section.view').forEach(s => s.hidden = s !== view);
+    document.body.classList.remove('wt', 'gatewide', 'homewide', 'worldwide'); if (window.__frameSwap) window.__frameSwap('dj');
     document.querySelectorAll('#tabs button').forEach(b => b.setAttribute('aria-current', b === tab ? 'page' : 'false'));
     document.body.classList.remove('focus'); document.body.classList.add('djwide');
     window.scrollTo(0, 0);
-    if (!booted) { booted = true; DJ_BOOT(ROOT); } else ROOT.dispatchEvent(new Event('dj-show'));
+    if (!booted) { booted = true; DJ_BOOT(ROOT); ROOT.append(Object.assign(document.createElement('style'), { textContent: '.wrap{max-width:none}.cols{grid-template-columns:minmax(0,4fr) minmax(0,8fr);gap:24px}@media (max-width:860px){.cols{grid-template-columns:1fr}}' })); } else ROOT.dispatchEvent(new Event('dj-show'));
   }
   tab.addEventListener('click', open);
   // any other tab: hide the board setup again (the app's own handler shows its view)
